@@ -45,10 +45,9 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <button onclick="openTopupModal()" class="flex items-center gap-1.5 bg-[#161224] hover:bg-[#1e1830] border border-[#261f3d] px-3 py-1.5 rounded-full text-xs font-semibold">
-          <span id="balance-display" class="text-violet-300">$0.00</span>
-          <span class="w-4 h-4 rounded-full bg-violet-600 text-white flex items-center justify-center text-xs">+</span>
-        </button>
+        <a href="https://t.me/yousifmziri" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 bg-[#161224] hover:bg-[#1e1830] border border-[#261f3d] px-3 py-1.5 rounded-full text-xs font-semibold text-violet-300 transition">
+          <span>@yousifmziri</span>
+        </a>
       </div>
     </div>
   </header>
@@ -60,7 +59,10 @@
   <div id="cart-modal" class="fixed inset-0 z-40 hidden bg-black/75 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="w-full max-w-md bg-[#161224] border border-[#261f3d] rounded-t-3xl sm:rounded-2xl p-5 max-h-[85vh] flex flex-col">
       <div class="flex items-center justify-between pb-3 border-b border-[#261f3d]">
-        <h2 class="font-bold text-lg">Shopping Cart</h2>
+        <div>
+          <h2 class="font-bold text-lg">Shopping Cart</h2>
+          <p class="text-[11px] text-zinc-400">Direct Telegram: <span class="text-violet-300 font-semibold">@yousifmziri</span></p>
+        </div>
         <button onclick="closeCartModal()" class="text-zinc-400 hover:text-white text-xl leading-none">&times;</button>
       </div>
 
@@ -71,25 +73,10 @@
           <span class="text-zinc-400">Total</span>
           <span id="cart-total" class="font-bold text-lg text-violet-300">$0.00</span>
         </div>
-        <button onclick="checkoutCart()" class="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 font-semibold text-sm text-white transition">
-          Complete Order
-        </button>
-      </div>
-    </div>
-  </div>
 
-  <!-- Topup Modal -->
-  <div id="topup-modal" class="fixed inset-0 z-40 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-sm bg-[#161224] border border-[#261f3d] rounded-2xl p-5 space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="font-bold text-base">Add Demo Balance</h2>
-        <button onclick="closeTopupModal()" class="text-zinc-400 hover:text-white text-xl leading-none">&times;</button>
-      </div>
-      <p class="text-xs text-zinc-400">Choose a quick balance amount for testing orders in the storefront.</p>
-      <div class="grid grid-cols-3 gap-2">
-        <button onclick="addBalance(10)" class="py-2.5 rounded-xl bg-[#201a34] hover:bg-violet-600 text-xs font-semibold transition">+$10</button>
-        <button onclick="addBalance(25)" class="py-2.5 rounded-xl bg-[#201a34] hover:bg-violet-600 text-xs font-semibold transition">+$25</button>
-        <button onclick="addBalance(50)" class="py-2.5 rounded-xl bg-[#201a34] hover:bg-violet-600 text-xs font-semibold transition">+$50</button>
+        <a id="telegram-order-btn" href="https://t.me/yousifmziri" target="_blank" rel="noopener noreferrer" onclick="saveOrderOnTelegramClick()" class="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 font-semibold text-sm text-white transition flex items-center justify-center gap-2">
+          <span>Order on Telegram (@yousifmziri)</span>
+        </a>
       </div>
     </div>
   </div>
@@ -117,6 +104,8 @@
   </nav>
 
   <script>
+    const TELEGRAM_USER = 'yousifmziri';
+
     const games = [
       {
         id: 'mc',
@@ -126,8 +115,8 @@
         sold: 3842,
         price: 1.00,
         hot: true,
-        badgeBg: 'from-emerald-500 to-lime-600',
-        icon: '⛏️',
+        image: 'https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png',
+        fallbackEmoji: '⛏️',
         desc: 'Full game access with instant delivery.'
       },
       {
@@ -138,8 +127,8 @@
         sold: 518,
         price: 4.00,
         hot: true,
-        badgeBg: 'from-amber-500 to-orange-600',
-        icon: '🏹',
+        image: 'https://upload.wikimedia.org/wikipedia/en/0/0a/Tomb_Raider_%282013_video_game%29.jpg',
+        fallbackEmoji: '🏹',
         desc: 'Action-adventure story campaign ready.'
       },
       {
@@ -150,8 +139,8 @@
         sold: 429,
         price: 5.00,
         hot: true,
-        badgeBg: 'from-red-600 to-rose-700',
-        icon: '🤠',
+        image: 'https://upload.wikimedia.org/wikipedia/en/a/a7/Red_Dead_Redemption.jpg',
+        fallbackEmoji: '🤠',
         desc: 'Classic open-world western experience.'
       },
       {
@@ -162,15 +151,14 @@
         sold: 890,
         price: 4.00,
         hot: false,
-        badgeBg: 'from-purple-600 to-indigo-700',
-        icon: '🌴',
+        image: 'https://upload.wikimedia.org/wikipedia/en/c/c4/GTASABOX.jpg',
+        fallbackEmoji: '🌴',
         desc: 'Remastered edition with updated visuals.'
       }
     ];
 
     let state = {
       tab: 'catalog',
-      balance: 25.00,
       cart: [],
       orders: []
     };
@@ -183,8 +171,19 @@
       window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 2000);
     }
 
-    function updateHeaderAndBadge() {
-      document.getElementById('balance-display').textContent = `$${state.balance.toFixed(2)}`;
+    function updateTelegramLink() {
+      const btn = document.getElementById('telegram-order-btn');
+      const total = getCartTotal().toFixed(2);
+      if (state.cart.length === 0) {
+        btn.href = `https://t.me/${TELEGRAM_USER}`;
+        return;
+      }
+      const lines = state.cart.map(item => `- ${item.title} (x${item.qty}) = $${(item.price * item.qty).toFixed(2)}`);
+      const text = `Hello @${TELEGRAM_USER}, I want to order:\n${lines.join('\n')}\nTotal: $${total}`;
+      btn.href = `https://t.me/${TELEGRAM_USER}?text=${encodeURIComponent(text)}`;
+    }
+
+    function updateBadge() {
       const totalQty = state.cart.reduce((sum, item) => sum + item.qty, 0);
       const badge = document.getElementById('cart-badge');
       if (totalQty > 0) {
@@ -193,6 +192,7 @@
       } else {
         badge.classList.add('hidden');
       }
+      updateTelegramLink();
     }
 
     function addToCart(gameId) {
@@ -204,7 +204,7 @@
       } else {
         state.cart.push({ ...game, qty: 1 });
       }
-      updateHeaderAndBadge();
+      updateBadge();
       showToast(`Added ${game.title} to cart`);
       if (state.tab === 'cart') render();
     }
@@ -216,7 +216,7 @@
       if (state.cart[idx].qty <= 0) {
         state.cart.splice(idx, 1);
       }
-      updateHeaderAndBadge();
+      updateBadge();
       renderCartModal();
       if (state.tab === 'cart') render();
     }
@@ -227,27 +227,12 @@
 
     function openCartModal() {
       renderCartModal();
+      updateTelegramLink();
       document.getElementById('cart-modal').classList.remove('hidden');
     }
 
     function closeCartModal() {
       document.getElementById('cart-modal').classList.add('hidden');
-    }
-
-    function openTopupModal() {
-      document.getElementById('topup-modal').classList.remove('hidden');
-    }
-
-    function closeTopupModal() {
-      document.getElementById('topup-modal').classList.add('hidden');
-    }
-
-    function addBalance(amount) {
-      state.balance += amount;
-      updateHeaderAndBadge();
-      closeTopupModal();
-      showToast(`Added $${amount.toFixed(2)} to balance`);
-      if (state.tab === 'profile') render();
     }
 
     function renderCartModal() {
@@ -256,17 +241,25 @@
       totalEl.textContent = `$${getCartTotal().toFixed(2)}`;
 
       if (state.cart.length === 0) {
-        container.innerHTML = `<p class="text-center text-zinc-400 text-sm py-8">Your cart is empty.</p>`;
+        container.innerHTML = `
+          <div class="text-center py-6 space-y-3">
+            <p class="text-zinc-400 text-sm">Your cart is empty.</p>
+            <a href="https://t.me/${TELEGRAM_USER}" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 rounded-xl bg-[#241d3d] hover:bg-[#2e254f] text-xs font-semibold text-violet-300">
+              Message @${TELEGRAM_USER} on Telegram
+            </a>
+          </div>
+        `;
         return;
       }
 
       container.innerHTML = state.cart.map(item => `
-        <div class="flex items-center justify-between bg-[#1c172e] border border-[#2b2347] rounded-xl p-3">
-          <div>
-            <p class="font-semibold text-sm">${item.title}</p>
+        <div class="flex items-center justify-between gap-3 bg-[#1c172e] border border-[#2b2347] rounded-xl p-3">
+          <img src="${item.image}" alt="${item.title}" class="w-11 h-11 rounded-lg object-cover shrink-0 bg-[#120e1e]" onerror="this.style.display='none'" />
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold text-sm truncate">${item.title}</p>
             <p class="text-xs text-zinc-400">$${(item.price * item.qty).toFixed(2)}</p>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 shrink-0">
             <button onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-[#2a2244] font-bold">-</button>
             <span class="text-xs font-semibold w-4 text-center">${item.qty}</span>
             <button onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-violet-600 font-bold">+</button>
@@ -275,28 +268,18 @@
       `).join('');
     }
 
-    function checkoutCart() {
+    function saveOrderOnTelegramClick() {
+      if (state.cart.length === 0) return;
       const total = getCartTotal();
-      if (state.cart.length === 0) {
-        showToast('Cart is empty');
-        return;
-      }
-      if (state.balance < total) {
-        showToast('Insufficient balance');
-        return;
-      }
-
-      state.balance -= total;
       state.orders.unshift({
         id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
         items: state.cart.map(i => `${i.title} (x${i.qty})`).join(', '),
         total: total,
-        status: 'Completed'
+        status: 'Sent to @' + TELEGRAM_USER
       });
       state.cart = [];
-      updateHeaderAndBadge();
+      updateBadge();
       closeCartModal();
-      showToast('Order completed!');
       setTab('orders');
     }
 
@@ -324,9 +307,12 @@
         <div class="flex items-center justify-between gap-3 bg-[#161224] hover:bg-[#1a152b] border border-[#261f3d] rounded-2xl p-3.5 transition">
           <div class="flex items-center gap-3.5 min-w-0">
             <div class="relative shrink-0">
-              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${game.badgeBg} flex items-center justify-center text-2xl shadow-md">
-                ${game.icon}
-              </div>
+              <img
+                src="${game.image}"
+                alt="${game.title}"
+                class="w-14 h-14 rounded-2xl object-cover shadow-md border border-[#2b2347] bg-[#120e1e]"
+                onerror="this.outerHTML='<div class=\\'w-14 h-14 rounded-2xl bg-violet-900/50 flex items-center justify-center text-2xl\\'>${game.fallbackEmoji}</div>'"
+              />
               ${game.hot ? `<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-orange-500 text-[11px] flex items-center justify-center shadow">🔥</span>` : ''}
             </div>
             <div class="min-w-0">
@@ -358,7 +344,7 @@
         return `
           <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-8 text-center space-y-2">
             <p class="font-semibold text-sm">No orders yet</p>
-            <p class="text-xs text-zinc-400">Add a game from the catalog and complete your first order.</p>
+            <p class="text-xs text-zinc-400">Add a game to the cart and message @${TELEGRAM_USER} on Telegram to order.</p>
           </div>
         `;
       }
@@ -369,7 +355,7 @@
             <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-semibold">${order.status}</span>
           </div>
           <p class="text-sm font-medium">${order.items}</p>
-          <p class="text-xs text-zinc-400">Paid: $${order.total.toFixed(2)}</p>
+          <p class="text-xs text-zinc-400">Total: $${order.total.toFixed(2)}</p>
         </div>
       `).join('');
     }
@@ -379,21 +365,21 @@
         <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-5 space-y-4">
           <div class="flex items-center justify-between">
             <div>
-              <h2 class="font-bold text-base">Store Member</h2>
-              <p class="text-xs text-zinc-400">Kurd0o Cyber Gold Catalog</p>
+              <h2 class="font-bold text-base">Kurd0o Store</h2>
+              <p class="text-xs text-zinc-400">Direct Telegram Support: @${TELEGRAM_USER}</p>
             </div>
-            <button onclick="openTopupModal()" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-xs font-semibold">
-              + Top Up
-            </button>
+            <a href="https://t.me/${TELEGRAM_USER}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-xs font-semibold">
+              Open Telegram
+            </a>
           </div>
           <div class="grid grid-cols-2 gap-3 pt-2 border-t border-[#261f3d] text-xs">
             <div class="bg-[#110d1c] rounded-xl p-3">
-              <p class="text-zinc-400">Current Balance</p>
-              <p class="font-bold text-base text-violet-300 mt-1">$${state.balance.toFixed(2)}</p>
+              <p class="text-zinc-400">Contact Handle</p>
+              <p class="font-bold text-sm text-violet-300 mt-1">@${TELEGRAM_USER}</p>
             </div>
             <div class="bg-[#110d1c] rounded-xl p-3">
-              <p class="text-zinc-400">Total Orders</p>
-              <p class="font-bold text-base text-white mt-1">${state.orders.length}</p>
+              <p class="text-zinc-400">Logged Orders</p>
+              <p class="font-bold text-sm text-white mt-1">${state.orders.length}</p>
             </div>
           </div>
         </div>
@@ -411,7 +397,7 @@
       }
     }
 
-    updateHeaderAndBadge();
+    updateBadge();
     render();
   </script>
 </body>
