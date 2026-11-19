@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" dir="ltr" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,19 +33,26 @@
 
   <!-- Top Header -->
   <header class="sticky top-0 z-30 bg-[#0b0912]/90 backdrop-blur border-b border-[#261f3d] px-4 py-3">
-    <div class="max-w-xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-white shadow-lg shadow-violet-900/40">
+    <div class="max-w-xl mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-white shadow-lg shadow-violet-900/40 shrink-0">
           K
         </div>
-        <div>
-          <h1 class="font-bold text-base leading-tight">Kurd0o Store</h1>
-          <p class="text-[11px] text-zinc-400">Digital Game Accounts</p>
+        <div class="min-w-0">
+          <h1 id="store-title" class="font-bold text-base leading-tight truncate">Kurd0o Store</h1>
+          <p id="store-subtitle" class="text-[11px] text-zinc-400 truncate">Digital Game Accounts</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <a href="https://t.me/yousifmziri" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 bg-[#161224] hover:bg-[#1e1830] border border-[#261f3d] px-3 py-1.5 rounded-full text-xs font-semibold text-violet-300 transition">
+      <div class="flex items-center gap-1.5 shrink-0">
+        <!-- Language Switcher -->
+        <div class="flex items-center bg-[#161224] border border-[#261f3d] rounded-full p-0.5 text-[11px] font-semibold">
+          <button onclick="setLang('ku')" id="lang-ku" class="px-2 py-1 rounded-full text-zinc-400 hover:text-white transition">KU</button>
+          <button onclick="setLang('ar')" id="lang-ar" class="px-2 py-1 rounded-full text-zinc-400 hover:text-white transition">AR</button>
+          <button onclick="setLang('en')" id="lang-en" class="px-2 py-1 rounded-full bg-violet-600 text-white transition">EN</button>
+        </div>
+
+        <a id="header-tg-link" href="https://t.me/yousifmziri" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1 bg-[#161224] hover:bg-[#1e1830] border border-[#261f3d] px-2.5 py-1.5 rounded-full text-xs font-semibold text-violet-300 transition">
           <span>@yousifmziri</span>
         </a>
       </div>
@@ -60,8 +67,8 @@
     <div class="w-full max-w-md bg-[#161224] border border-[#261f3d] rounded-t-3xl sm:rounded-2xl p-5 max-h-[85vh] flex flex-col">
       <div class="flex items-center justify-between pb-3 border-b border-[#261f3d]">
         <div>
-          <h2 class="font-bold text-lg">Shopping Cart</h2>
-          <p class="text-[11px] text-zinc-400">Direct Telegram: <span class="text-violet-300 font-semibold">@yousifmziri</span></p>
+          <h2 id="cart-modal-title" class="font-bold text-lg">Shopping Cart</h2>
+          <p class="text-[11px] text-zinc-400">@yousifmziri</p>
         </div>
         <button onclick="closeCartModal()" class="text-zinc-400 hover:text-white text-xl leading-none">&times;</button>
       </div>
@@ -70,13 +77,13 @@
 
       <div class="pt-3 border-t border-[#261f3d] space-y-3">
         <div class="flex items-center justify-between text-sm">
-          <span class="text-zinc-400">Total</span>
+          <span id="cart-total-label" class="text-zinc-400">Total</span>
           <span id="cart-total" class="font-bold text-lg text-violet-300">$0.00</span>
         </div>
 
-        <a id="telegram-order-btn" href="https://t.me/yousifmziri" target="_blank" rel="noopener noreferrer" onclick="saveOrderOnTelegramClick()" class="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 font-semibold text-sm text-white transition flex items-center justify-center gap-2">
-          <span>Order on Telegram (@yousifmziri)</span>
-        </a>
+        <button id="place-order-btn" onclick="placeOrderToOrdersTab()" class="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 font-semibold text-sm text-white transition">
+          Confirm & Send to Orders
+        </button>
       </div>
     </div>
   </div>
@@ -88,17 +95,18 @@
   <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#120e1e]/95 backdrop-blur border-t border-[#261f3d]">
     <div class="max-w-xl mx-auto grid grid-cols-4 py-2 text-[11px]">
       <button onclick="setTab('catalog')" id="nav-catalog" class="flex flex-col items-center gap-1 py-1 text-violet-400 font-semibold">
-        <span>Catalog</span>
+        <span id="tab-catalog-label">Catalog</span>
       </button>
       <button onclick="setTab('cart')" id="nav-cart" class="relative flex flex-col items-center gap-1 py-1 text-zinc-400 hover:text-zinc-200">
-        <span>Cart</span>
+        <span id="tab-cart-label">Cart</span>
         <span id="cart-badge" class="hidden absolute top-0.5 right-6 bg-violet-600 text-white text-[10px] font-bold px-1.5 rounded-full">0</span>
       </button>
-      <button onclick="setTab('orders')" id="nav-orders" class="flex flex-col items-center gap-1 py-1 text-zinc-400 hover:text-zinc-200">
-        <span>Orders</span>
+      <button onclick="setTab('orders')" id="nav-orders" class="relative flex flex-col items-center gap-1 py-1 text-zinc-400 hover:text-zinc-200">
+        <span id="tab-orders-label">Orders</span>
+        <span id="orders-badge" class="hidden absolute top-0.5 right-6 bg-emerald-600 text-white text-[10px] font-bold px-1.5 rounded-full">0</span>
       </button>
       <button onclick="setTab('profile')" id="nav-profile" class="flex flex-col items-center gap-1 py-1 text-zinc-400 hover:text-zinc-200">
-        <span>Profile</span>
+        <span id="tab-profile-label">Profile</span>
       </button>
     </div>
   </nav>
@@ -106,106 +114,255 @@
   <script>
     const TELEGRAM_USER = 'yousifmziri';
 
+    const i18n = {
+      en: {
+        dir: 'ltr',
+        storeSubtitle: 'Digital Game Accounts',
+        catalog: 'Catalog',
+        cart: 'Cart',
+        orders: 'Orders',
+        profile: 'Profile',
+        sold: 'sold',
+        addedToCart: 'Added to cart:',
+        cartEmpty: 'Your cart is empty.',
+        total: 'Total',
+        confirmOrder: 'Confirm Order (Go to Orders)',
+        orderAddedToast: 'Order saved in Orders! Open Orders to message @yousifmziri',
+        noOrdersTitle: 'No orders yet',
+        noOrdersDesc: 'Add games to cart and confirm your order to send it via Telegram.',
+        sendTelegramBtn: 'Message @yousifmziri on Telegram',
+        readyMsgLabel: 'Ready Telegram message:',
+        orderStatusPending: 'Ready to send',
+        profileTitle: 'Kurd0o Store',
+        profileDesc: 'Direct orders via Telegram',
+        openTelegram: 'Open Telegram',
+        contactLabel: 'Telegram Username',
+        ordersCountLabel: 'Orders Count',
+        msgHeader: (user) => `Hello @${user}, I want to order:`,
+        msgTotal: (total) => `Total: $${total}`,
+        games: {
+          mc: { title: 'Minecraft', desc: 'Full game access with instant delivery.' },
+          tr: { title: 'Tomb Raider', desc: 'Action-adventure story campaign ready.' },
+          rdr: { title: 'Red Dead Redemption', desc: 'Classic open-world western experience.' },
+          'gtasa-de': { title: 'GTA: San Andreas – Definitive Edition', desc: 'Remastered edition with updated visuals.' }
+        }
+      },
+      ar: {
+        dir: 'rtl',
+        storeSubtitle: 'حسابات ألعاب رقمية',
+        catalog: 'الكتالوج',
+        cart: 'السلة',
+        orders: 'الطلبات',
+        profile: 'الحساب',
+        sold: 'مباع',
+        addedToCart: 'تمت الإضافة إلى السلة:',
+        cartEmpty: 'السلة فارغة حالياً.',
+        total: 'المجموع',
+        confirmOrder: 'تأكيد الطلب وإرساله لقسم الطلبات',
+        orderAddedToast: 'تمت إضافة الطلب إلى قسم الطلبات! ادخل للطلبات للتواصل على تليجرام',
+        noOrdersTitle: 'لا توجد طلبات بعد',
+        noOrdersDesc: 'أضف الألعاب إلى السلة وأكّد الطلب حتى يظهر هنا مع رسالة جاهزة لتليجرام.',
+        sendTelegramBtn: 'تواصل مع @yousifmziri على تليجرام',
+        readyMsgLabel: 'رسالة جاهزة للإرسال في تليجرام:',
+        orderStatusPending: 'جاهز للإرسال',
+        profileTitle: 'متجر Kurd0o',
+        profileDesc: 'الطلبات والتواصل المباشر عبر تليجرام',
+        openTelegram: 'فتح تليجرام',
+        contactLabel: 'معرف تليجرام',
+        ordersCountLabel: 'عدد الطلبات',
+        msgHeader: (user) => `مرحباً @${user}، أريد طلب الألعاب التالية:`,
+        msgTotal: (total) => `المجموع الكلي: $${total}`,
+        games: {
+          mc: { title: 'Minecraft', desc: 'حساب كامل مع تسليم سريع.' },
+          tr: { title: 'Tomb Raider', desc: 'لعبة أكشن ومغامرات جاهزة.' },
+          rdr: { title: 'Red Dead Redemption', desc: 'عالم مفتوح كلاسيكي مميز.' },
+          'gtasa-de': { title: 'GTA: San Andreas – Definitive Edition', desc: 'النسخة المحسّنة بجودة مطورة.' }
+        }
+      },
+      ku: {
+        dir: 'rtl',
+        storeSubtitle: 'ئەکاونتێن یاریێن دیجیتاڵی',
+        catalog: 'لیستا یاریان',
+        cart: 'سەبەتە',
+        orders: 'داواکاری',
+        profile: 'پرۆفایل',
+        sold: 'هاتینە فرۆتن',
+        addedToCart: 'زێدەکر بۆ سەبەتەیێ:',
+        cartEmpty: 'سەبەتە یا بەتالە.',
+        total: 'کۆمێ گشتی',
+        confirmOrder: 'پشتراستکرنا داواکاریێ بۆ بەشێ Orders',
+        orderAddedToast: 'داواکاری چوو بۆ بەشێ Orders! بچۆ سەر داواکاریان بۆ تێلیگرامێ',
+        noOrdersTitle: 'چ داواکاری نینن هێشتا',
+        noOrdersDesc: 'یاریان بکە ناڤ سەبەتەیێ و پشتراست بکە دا ل ڤێرێ ب نامەیا ئامادە بهێن.',
+        sendTelegramBtn: 'پەیوەندیێ ب @yousifmziri بکە ل تێلیگرامێ',
+        readyMsgLabel: 'نامەیا ئامادە بۆ هنارتنێ د تێلیگرامێ دا:',
+        orderStatusPending: 'ئامادەیە بۆ هنارتنێ',
+        profileTitle: 'کۆگەها Kurd0o',
+        profileDesc: 'داواکاری و پەیوەندیا ڕاستەوخۆ ب تێلیگرامێ',
+        openTelegram: 'ڤەکرنا تێلیگرامێ',
+        contactLabel: 'یوزەرنێمێ تێلیگرامێ',
+        ordersCountLabel: 'هژمارا داواکاریان',
+        msgHeader: (user) => `سڵاڤ @${user}، من دڤێت ڤان یاریان داوا بکەم:`,
+        msgTotal: (total) => `کۆمێ گشتی: $${total}`,
+        games: {
+          mc: { title: 'Minecraft', desc: 'ئەکاونتێ تەمام ب گەهشتنا لەزگین.' },
+          tr: { title: 'Tomb Raider', desc: 'یاریەکا سەرکێشی و ئەکشن یا ئامادە.' },
+          rdr: { title: 'Red Dead Redemption', desc: 'جیهانەکا ڤەکری یا کلاسیک و تایبەت.' },
+          'gtasa-de': { title: 'GTA: San Andreas – Definitive Edition', desc: 'وەشانا نووکری ب گرافیکا پێشکەفتی.' }
+        }
+      }
+    };
+
     const games = [
       {
         id: 'mc',
-        title: 'Minecraft',
         rating: '5.0',
         reviews: 60,
         sold: 3842,
         price: 1.00,
         hot: true,
-        image: 'https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png',
-        fallbackEmoji: '⛏️',
-        desc: 'Full game access with instant delivery.'
+        images: [
+          'https://images.launchbox-app.com/e6b4f4e4-63d2-4d3d-98f6-5669a3c42b13.jpg',
+          'https://cdn.mos.cms.futurecdn.net/42Q2X3C7h8r5v6b8n9m0k1.jpg',
+          'https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png'
+        ],
+        fallbackEmoji: '⛏️'
       },
       {
         id: 'tr',
-        title: 'Tomb Raider',
         rating: '4.9',
         reviews: 24,
         sold: 518,
         price: 4.00,
         hot: true,
-        image: 'https://upload.wikimedia.org/wikipedia/en/0/0a/Tomb_Raider_%282013_video_game%29.jpg',
-        fallbackEmoji: '🏹',
-        desc: 'Action-adventure story campaign ready.'
+        images: [
+          'https://images.launchbox-app.com/72894a8b-0a7b-4f9e-8b5a-31f92c2d9a11.jpg',
+          'https://upload.wikimedia.org/wikipedia/en/0/0a/Tomb_Raider_%282013_video_game%29.jpg'
+        ],
+        fallbackEmoji: '🏹'
       },
       {
         id: 'rdr',
-        title: 'Red Dead Redemption',
         rating: '4.9',
         reviews: 19,
         sold: 429,
         price: 5.00,
         hot: true,
-        image: 'https://upload.wikimedia.org/wikipedia/en/a/a7/Red_Dead_Redemption.jpg',
-        fallbackEmoji: '🤠',
-        desc: 'Classic open-world western experience.'
+        images: [
+          'https://upload.wikimedia.org/wikipedia/en/a/a7/Red_Dead_Redemption.jpg',
+          'https://images.launchbox-app.com/19336877-2d8a-4d27-9a4e-8f7a9d3c6b12.jpg'
+        ],
+        fallbackEmoji: '🤠'
       },
       {
         id: 'gtasa-de',
-        title: 'GTA: San Andreas – Definitive Edition',
         rating: '4.8',
         reviews: 31,
         sold: 890,
         price: 4.00,
         hot: false,
-        image: 'https://upload.wikimedia.org/wikipedia/en/c/c4/GTASABOX.jpg',
-        fallbackEmoji: '🌴',
-        desc: 'Remastered edition with updated visuals.'
+        images: [
+          'https://upload.wikimedia.org/wikipedia/en/c/c4/GTASABOX.jpg',
+          'https://images.launchbox-app.com/6a9c8f2e-3b1d-4e7a-9c5b-2d4f6a8e1b3c.jpg'
+        ],
+        fallbackEmoji: '🌴'
       }
     ];
 
     let state = {
+      lang: 'en',
       tab: 'catalog',
       cart: [],
       orders: []
     };
+
+    function t() {
+      return i18n[state.lang] || i18n.en;
+    }
+
+    function handleImageError(imgEl, gameId, nextIdx) {
+      const game = games.find(g => g.id === gameId);
+      if (game && game.images && nextIdx < game.images.length) {
+        imgEl.setAttribute('onerror', `handleImageError(this, '${gameId}', ${nextIdx + 1})`);
+        imgEl.src = game.images[nextIdx];
+      } else {
+        const emoji = game ? game.fallbackEmoji : '🎮';
+        imgEl.outerHTML = `<div class="w-14 h-14 rounded-2xl bg-violet-900/50 border border-[#2b2347] flex items-center justify-center text-2xl">${emoji}</div>`;
+      }
+    }
 
     function showToast(message) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
       toast.classList.remove('hidden');
       clearTimeout(window.toastTimer);
-      window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 2000);
+      window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 2400);
     }
 
-    function updateTelegramLink() {
-      const btn = document.getElementById('telegram-order-btn');
-      const total = getCartTotal().toFixed(2);
-      if (state.cart.length === 0) {
-        btn.href = `https://t.me/${TELEGRAM_USER}`;
-        return;
+    function setLang(lang) {
+      state.lang = lang;
+      const tr = t();
+      document.documentElement.lang = lang;
+      document.documentElement.dir = tr.dir;
+
+      ['ku', 'ar', 'en'].forEach(code => {
+        const btn = document.getElementById(`lang-${code}`);
+        if (code === lang) {
+          btn.classList.add('bg-violet-600', 'text-white');
+          btn.classList.remove('text-zinc-400');
+        } else {
+          btn.classList.remove('bg-violet-600', 'text-white');
+          btn.classList.add('text-zinc-400');
+        }
+      });
+
+      document.getElementById('store-subtitle').textContent = tr.storeSubtitle;
+      document.getElementById('tab-catalog-label').textContent = tr.catalog;
+      document.getElementById('tab-cart-label').textContent = tr.cart;
+      document.getElementById('tab-orders-label').textContent = tr.orders;
+      document.getElementById('tab-profile-label').textContent = tr.profile;
+      document.getElementById('cart-modal-title').textContent = tr.cart;
+      document.getElementById('cart-total-label').textContent = tr.total;
+      document.getElementById('place-order-btn').textContent = tr.confirmOrder;
+
+      updateBadges();
+      if (!document.getElementById('cart-modal').classList.contains('hidden')) {
+        renderCartModal();
       }
-      const lines = state.cart.map(item => `- ${item.title} (x${item.qty}) = $${(item.price * item.qty).toFixed(2)}`);
-      const text = `Hello @${TELEGRAM_USER}, I want to order:\n${lines.join('\n')}\nTotal: $${total}`;
-      btn.href = `https://t.me/${TELEGRAM_USER}?text=${encodeURIComponent(text)}`;
+      render();
     }
 
-    function updateBadge() {
+    function updateBadges() {
       const totalQty = state.cart.reduce((sum, item) => sum + item.qty, 0);
-      const badge = document.getElementById('cart-badge');
+      const cartBadge = document.getElementById('cart-badge');
       if (totalQty > 0) {
-        badge.textContent = totalQty;
-        badge.classList.remove('hidden');
+        cartBadge.textContent = totalQty;
+        cartBadge.classList.remove('hidden');
       } else {
-        badge.classList.add('hidden');
+        cartBadge.classList.add('hidden');
       }
-      updateTelegramLink();
+
+      const ordersBadge = document.getElementById('orders-badge');
+      if (state.orders.length > 0) {
+        ordersBadge.textContent = state.orders.length;
+        ordersBadge.classList.remove('hidden');
+      } else {
+        ordersBadge.classList.add('hidden');
+      }
     }
 
     function addToCart(gameId) {
       const game = games.find(g => g.id === gameId);
       if (!game) return;
+      const gText = t().games[game.id];
       const existing = state.cart.find(item => item.id === gameId);
       if (existing) {
         existing.qty += 1;
       } else {
         state.cart.push({ ...game, qty: 1 });
       }
-      updateBadge();
-      showToast(`Added ${game.title} to cart`);
+      updateBadges();
+      showToast(`${t().addedToCart} ${gText.title}`);
       if (state.tab === 'cart') render();
     }
 
@@ -216,7 +373,7 @@
       if (state.cart[idx].qty <= 0) {
         state.cart.splice(idx, 1);
       }
-      updateBadge();
+      updateBadges();
       renderCartModal();
       if (state.tab === 'cart') render();
     }
@@ -227,7 +384,6 @@
 
     function openCartModal() {
       renderCartModal();
-      updateTelegramLink();
       document.getElementById('cart-modal').classList.remove('hidden');
     }
 
@@ -235,59 +391,90 @@
       document.getElementById('cart-modal').classList.add('hidden');
     }
 
+    function buildTelegramMessageForOrder(orderItems, totalAmount, langCode) {
+      const tr = i18n[langCode] || i18n.en;
+      const lines = orderItems.map(item => {
+        const gTitle = (tr.games[item.id] && tr.games[item.id].title) || item.title;
+        const linePrice = (item.price * item.qty).toFixed(2);
+        return `- ${gTitle} (x${item.qty}) = $${linePrice}`;
+      });
+      return `${tr.msgHeader(TELEGRAM_USER)}\n${lines.join('\n')}\n${tr.msgTotal(totalAmount.toFixed(2))}`;
+    }
+
+    function getTelegramUrl(messageText) {
+      return `https://t.me/${TELEGRAM_USER}?text=${encodeURIComponent(messageText)}`;
+    }
+
     function renderCartModal() {
       const container = document.getElementById('cart-items');
       const totalEl = document.getElementById('cart-total');
+      const confirmBtn = document.getElementById('place-order-btn');
+      const tr = t();
+
       totalEl.textContent = `$${getCartTotal().toFixed(2)}`;
 
       if (state.cart.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-6 space-y-3">
-            <p class="text-zinc-400 text-sm">Your cart is empty.</p>
-            <a href="https://t.me/${TELEGRAM_USER}" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 rounded-xl bg-[#241d3d] hover:bg-[#2e254f] text-xs font-semibold text-violet-300">
-              Message @${TELEGRAM_USER} on Telegram
-            </a>
-          </div>
-        `;
+        confirmBtn.disabled = true;
+        confirmBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        container.innerHTML = `<p class="text-center text-zinc-400 text-sm py-8">${tr.cartEmpty}</p>`;
         return;
       }
 
-      container.innerHTML = state.cart.map(item => `
-        <div class="flex items-center justify-between gap-3 bg-[#1c172e] border border-[#2b2347] rounded-xl p-3">
-          <img src="${item.image}" alt="${item.title}" class="w-11 h-11 rounded-lg object-cover shrink-0 bg-[#120e1e]" onerror="this.style.display='none'" />
-          <div class="min-w-0 flex-1">
-            <p class="font-semibold text-sm truncate">${item.title}</p>
-            <p class="text-xs text-zinc-400">$${(item.price * item.qty).toFixed(2)}</p>
+      confirmBtn.disabled = false;
+      confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      container.innerHTML = state.cart.map(item => {
+        const gText = tr.games[item.id];
+        return `
+          <div class="flex items-center justify-between gap-3 bg-[#1c172e] border border-[#2b2347] rounded-xl p-3">
+            <img
+              src="${item.images[0]}"
+              alt="${gText.title}"
+              class="w-11 h-11 rounded-lg object-cover shrink-0 bg-[#120e1e]"
+              onerror="handleImageError(this, '${item.id}', 1)"
+            />
+            <div class="min-w-0 flex-1">
+              <p class="font-semibold text-sm truncate">${gText.title}</p>
+              <p class="text-xs text-zinc-400">$${(item.price * item.qty).toFixed(2)}</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-[#2a2244] font-bold">-</button>
+              <span class="text-xs font-semibold w-4 text-center">${item.qty}</span>
+              <button onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-violet-600 font-bold">+</button>
+            </div>
           </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <button onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-[#2a2244] font-bold">-</button>
-            <span class="text-xs font-semibold w-4 text-center">${item.qty}</span>
-            <button onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-violet-600 font-bold">+</button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    function saveOrderOnTelegramClick() {
+    function placeOrderToOrdersTab() {
       if (state.cart.length === 0) return;
       const total = getCartTotal();
+      const orderItems = state.cart.map(i => ({
+        id: i.id,
+        title: i18n.en.games[i.id].title,
+        qty: i.qty,
+        price: i.price
+      }));
+
       state.orders.unshift({
         id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
-        items: state.cart.map(i => `${i.title} (x${i.qty})`).join(', '),
-        total: total,
-        status: 'Sent to @' + TELEGRAM_USER
+        items: orderItems,
+        total: total
       });
+
       state.cart = [];
-      updateBadge();
+      updateBadges();
       closeCartModal();
+      showToast(t().orderAddedToast);
       setTab('orders');
     }
 
     function setTab(tabName) {
       state.tab = tabName;
-      ['catalog', 'cart', 'orders', 'profile'].forEach(t => {
-        const el = document.getElementById(`nav-${t}`);
-        if (t === tabName) {
+      ['catalog', 'cart', 'orders', 'profile'].forEach(tName => {
+        const el = document.getElementById(`nav-${tName}`);
+        if (tName === tabName) {
           el.classList.remove('text-zinc-400');
           el.classList.add('text-violet-400', 'font-semibold');
         } else {
@@ -303,82 +490,115 @@
     }
 
     function renderCatalog() {
-      return games.map(game => `
-        <div class="flex items-center justify-between gap-3 bg-[#161224] hover:bg-[#1a152b] border border-[#261f3d] rounded-2xl p-3.5 transition">
-          <div class="flex items-center gap-3.5 min-w-0">
-            <div class="relative shrink-0">
-              <img
-                src="${game.image}"
-                alt="${game.title}"
-                class="w-14 h-14 rounded-2xl object-cover shadow-md border border-[#2b2347] bg-[#120e1e]"
-                onerror="this.outerHTML='<div class=\\'w-14 h-14 rounded-2xl bg-violet-900/50 flex items-center justify-center text-2xl\\'>${game.fallbackEmoji}</div>'"
-              />
-              ${game.hot ? `<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-orange-500 text-[11px] flex items-center justify-center shadow">🔥</span>` : ''}
-            </div>
-            <div class="min-w-0">
-              <h2 class="font-bold text-sm sm:text-base truncate">${game.title}</h2>
-              <div class="flex items-center gap-2 text-xs text-zinc-400 mt-0.5">
-                <span class="text-amber-400 font-semibold">★ ${game.rating}</span>
-                <span>(${game.reviews})</span>
-                <span>•</span>
-                <span>${game.sold} sold</span>
+      const tr = t();
+      return games.map(game => {
+        const gText = tr.games[game.id];
+        return `
+          <div class="flex items-center justify-between gap-3 bg-[#161224] hover:bg-[#1a152b] border border-[#261f3d] rounded-2xl p-3.5 transition">
+            <div class="flex items-center gap-3.5 min-w-0">
+              <div class="relative shrink-0">
+                <img
+                  src="${game.images[0]}"
+                  alt="${gText.title}"
+                  class="w-14 h-14 rounded-2xl object-cover shadow-md border border-[#2b2347] bg-[#120e1e]"
+                  onerror="handleImageError(this, '${game.id}', 1)"
+                />
+                ${game.hot ? `<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-orange-500 text-[11px] flex items-center justify-center shadow">🔥</span>` : ''}
               </div>
-              <p class="text-[11px] text-zinc-500 truncate mt-0.5">${game.desc}</p>
+              <div class="min-w-0">
+                <h2 class="font-bold text-sm sm:text-base truncate">${gText.title}</h2>
+                <div class="flex items-center gap-2 text-xs text-zinc-400 mt-0.5">
+                  <span class="text-amber-400 font-semibold">★ ${game.rating}</span>
+                  <span>(${game.reviews})</span>
+                  <span>•</span>
+                  <span>${game.sold} ${tr.sold}</span>
+                </div>
+                <p class="text-[11px] text-zinc-500 truncate mt-0.5">${gText.desc}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 shrink-0">
+              <span class="font-bold text-sm sm:text-base text-white">$${game.price.toFixed(2)}</span>
+              <button onclick="addToCart('${game.id}')" aria-label="Add ${gText.title} to cart" class="w-10 h-10 rounded-xl bg-violet-600 hover:bg-violet-700 active:scale-95 flex items-center justify-center text-white transition shadow-md shadow-violet-950/60">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              </button>
             </div>
           </div>
-
-          <div class="flex items-center gap-2.5 shrink-0">
-            <span class="font-bold text-sm sm:text-base text-white">$${game.price.toFixed(2)}</span>
-            <button onclick="addToCart('${game.id}')" aria-label="Add ${game.title} to cart" class="w-10 h-10 rounded-xl bg-violet-600 hover:bg-violet-700 active:scale-95 flex items-center justify-center text-white transition shadow-md shadow-violet-950/60">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderOrders() {
+      const tr = t();
       if (state.orders.length === 0) {
         return `
           <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-8 text-center space-y-2">
-            <p class="font-semibold text-sm">No orders yet</p>
-            <p class="text-xs text-zinc-400">Add a game to the cart and message @${TELEGRAM_USER} on Telegram to order.</p>
+            <p class="font-semibold text-sm">${tr.noOrdersTitle}</p>
+            <p class="text-xs text-zinc-400">${tr.noOrdersDesc}</p>
           </div>
         `;
       }
-      return state.orders.map(order => `
-        <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-4 space-y-1.5">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-violet-300">${order.id}</span>
-            <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-semibold">${order.status}</span>
+
+      return state.orders.map(order => {
+        const msgText = buildTelegramMessageForOrder(order.items, order.total, state.lang);
+        const tgUrl = getTelegramUrl(msgText);
+        const itemsSummary = order.items.map(i => {
+          const gTitle = (tr.games[i.id] && tr.games[i.id].title) || i.title;
+          return `${gTitle} (x${i.qty})`;
+        }).join(' • ');
+
+        return `
+          <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-4 space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-violet-300">${order.id}</span>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-semibold">${tr.orderStatusPending}</span>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <span class="font-medium">${itemsSummary}</span>
+              <span class="font-bold text-violet-300">$${order.total.toFixed(2)}</span>
+            </div>
+
+            <div class="bg-[#100c1b] border border-[#251d3d] rounded-xl p-2.5 space-y-1">
+              <p class="text-[11px] text-zinc-400">${tr.readyMsgLabel}</p>
+              <pre class="text-xs text-zinc-200 whitespace-pre-wrap font-sans leading-relaxed">${msgText}</pre>
+            </div>
+
+            <a
+              href="${tgUrl}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full py-2.5 px-4 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition"
+            >
+              <span>${tr.sendTelegramBtn}</span>
+            </a>
           </div>
-          <p class="text-sm font-medium">${order.items}</p>
-          <p class="text-xs text-zinc-400">Total: $${order.total.toFixed(2)}</p>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderProfile() {
+      const tr = t();
       return `
         <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-5 space-y-4">
           <div class="flex items-center justify-between">
             <div>
-              <h2 class="font-bold text-base">Kurd0o Store</h2>
-              <p class="text-xs text-zinc-400">Direct Telegram Support: @${TELEGRAM_USER}</p>
+              <h2 class="font-bold text-base">${tr.profileTitle}</h2>
+              <p class="text-xs text-zinc-400">${tr.profileDesc}</p>
             </div>
             <a href="https://t.me/${TELEGRAM_USER}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-xs font-semibold">
-              Open Telegram
+              ${tr.openTelegram}
             </a>
           </div>
           <div class="grid grid-cols-2 gap-3 pt-2 border-t border-[#261f3d] text-xs">
             <div class="bg-[#110d1c] rounded-xl p-3">
-              <p class="text-zinc-400">Contact Handle</p>
+              <p class="text-zinc-400">${tr.contactLabel}</p>
               <p class="font-bold text-sm text-violet-300 mt-1">@${TELEGRAM_USER}</p>
             </div>
             <div class="bg-[#110d1c] rounded-xl p-3">
-              <p class="text-zinc-400">Logged Orders</p>
+              <p class="text-zinc-400">${tr.ordersCountLabel}</p>
               <p class="font-bold text-sm text-white mt-1">${state.orders.length}</p>
             </div>
           </div>
@@ -397,8 +617,7 @@
       }
     }
 
-    updateBadge();
-    render();
+    setLang('en');
   </script>
 </body>
 </html>
