@@ -84,46 +84,63 @@
   <script>
     const TELEGRAM_USER = 'yousifmziri';
 
+    function makeSvgBanner(title, subtitle, c1, c2) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+        <defs>
+          <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="${c1}"/>
+            <stop offset="100%" stop-color="${c2}"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="450" fill="url(#g)"/>
+        <circle cx="680" cy="90" r="160" fill="rgba(255,255,255,0.08)"/>
+        <circle cx="120" cy="380" r="140" fill="rgba(0,0,0,0.22)"/>
+        <text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-family="system-ui, sans-serif" font-weight="900" font-size="44" letter-spacing="2">${title}</text>
+        <text x="50%" y="61%" dominant-baseline="middle" text-anchor="middle" fill="rgba(255,255,255,0.82)" font-family="system-ui, sans-serif" font-weight="700" font-size="18" letter-spacing="4">${subtitle}</text>
+      </svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
     const games = [
       {
         id: 'minecraft',
         title: 'Minecraft',
         price: 1.00,
         images: [
-          'https://images.launchbox-app.com/e6b4f4e4-63d2-4d3d-98f6-5669a3c42b13.jpg',
-          'https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png'
-        ],
-        fallback: 'MINECRAFT'
+          'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1672970/header.jpg',
+          'https://image.api.playstation.com/vulcan/img/rnd/202010/2621/H9v5o8vP6RKkQtRbuKCZWsyE.png',
+          makeSvgBanner('MINECRAFT', 'JAVA & BEDROCK EDITION', '#15803d', '#052e16')
+        ]
       },
       {
         id: 'tomb-raider',
         title: 'Tomb Raider',
         price: 4.00,
         images: [
-          'https://images.launchbox-app.com/72894a8b-0a7b-4f9e-8b5a-31f92c2d9a11.jpg',
-          'https://upload.wikimedia.org/wikipedia/en/0/0a/Tomb_Raider_%282013_video_game%29.jpg'
-        ],
-        fallback: 'TOMB RAIDER'
+          'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/203160/header.jpg',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/203160/header.jpg',
+          makeSvgBanner('TOMB RAIDER', 'SURVIVOR EDITION', '#c2410c', '#1c1917')
+        ]
       },
       {
         id: 'rdr',
         title: 'Red Dead Redemption',
         price: 5.00,
         images: [
+          'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2668510/header.jpg',
           'https://upload.wikimedia.org/wikipedia/en/a/a7/Red_Dead_Redemption.jpg',
-          'https://images.launchbox-app.com/19336877-2d8a-4d27-9a4e-8f7a9d3c6b12.jpg'
-        ],
-        fallback: 'RED DEAD REDEMPTION'
+          makeSvgBanner('RED DEAD REDEMPTION', 'ROCKSTAR GAMES', '#b91c1c', '#18181b')
+        ]
       },
       {
         id: 'gta-sa-de',
         title: 'GTA: San Andreas – Definitive Edition',
         price: 4.00,
         images: [
+          'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1547000/header.jpg',
           'https://upload.wikimedia.org/wikipedia/en/c/c4/GTASABOX.jpg',
-          'https://images.launchbox-app.com/6a9c8f2e-3b1d-4e7a-9c5b-2d4f6a8e1b3c.jpg'
-        ],
-        fallback: 'GTA SAN ANDREAS DE'
+          makeSvgBanner('GTA: SAN ANDREAS', 'THE DEFINITIVE EDITION', '#d97706', '#18181b')
+        ]
       }
     ];
 
@@ -132,9 +149,6 @@
       if (game && game.images && nextIndex < game.images.length) {
         imgEl.setAttribute('onerror', `handleCoverError(this, '${gameId}', ${nextIndex + 1})`);
         imgEl.src = game.images[nextIndex];
-      } else {
-        const label = game ? game.fallback : 'GAME';
-        imgEl.outerHTML = `<div class="w-full h-full bg-[#1b1b22] flex items-center justify-center text-orange-400 font-extrabold text-sm tracking-wider px-4 text-center">${label}</div>`;
       }
     }
 
@@ -149,14 +163,14 @@
         const tgLink = buildRequestUrl(game);
         return `
           <article class="game-card rounded-2xl overflow-hidden flex flex-col">
-            <div class="relative w-full h-60 sm:h-64 bg-[#101014] overflow-hidden border-b border-[#27272f]">
+            <div class="relative w-full aspect-[16/9] bg-[#101014] overflow-hidden border-b border-[#27272f]">
               <img
                 src="${game.images[0]}"
                 alt="${game.title}"
                 class="w-full h-full object-cover transition duration-300 hover:scale-105"
                 onerror="handleCoverError(this, '${game.id}', 1)"
               />
-              <span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-black/80 backdrop-blur border border-orange-500/50 text-orange-400 font-extrabold text-sm">
+              <span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-black/85 backdrop-blur border border-orange-500/60 text-orange-400 font-extrabold text-sm shadow-md">
                 $${game.price.toFixed(2)}
               </span>
             </div>
