@@ -1,373 +1,418 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl" id="html-root">
+<html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurd0oAccounts | Cyber Gold Edition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap');
-        body { 
-            font-family: 'Vazirmatn', sans-serif; 
-            background-color: #060504; 
-            background-image: radial-gradient(circle at 50% 0%, rgba(191, 149, 63, 0.12) 0%, transparent 60%);
-            color: #F3F4F6; 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kurd0o Store | Game Catalog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            bgmain: '#0b0912',
+            cardbg: '#161224',
+            cardborder: '#261f3d',
+            accent: '#7c3aed',
+            accenthover: '#6d28d9'
+          }
         }
-        .cyber-gold { background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #AA771C); }
-        .gold-text { background: linear-gradient(135deg, #FBF5B7, #BF953F, #AA771C); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .cyber-border { border: 1px solid rgba(191, 149, 63, 0.35); }
-        .cyber-glow { box-shadow: 0 0 30px rgba(191, 149, 63, 0.15), inset 0 0 15px rgba(191, 149, 63, 0.05); }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
-        .floating { animation: float 3s ease-in-out infinite; }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0b0912;
+      color: #f4f3f8;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center p-4 selection:bg-amber-500 selection:text-black relative overflow-x-hidden">
+<body class="min-h-screen pb-24">
 
-    <!-- إشعارات حية منبثقة -->
-    <div id="live-toast" class="fixed bottom-4 left-4 right-4 max-w-xs mx-auto bg-slate-900/95 backdrop-blur border border-amber-500/40 rounded-xl p-3 shadow-2xl flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-500 z-50">
-        <div class="w-8 h-8 cyber-gold rounded-lg flex items-center justify-center text-slate-950 shrink-0">
-            <i class="fa-solid fa-bolt text-xs"></i>
+  <!-- Top Header -->
+  <header class="sticky top-0 z-30 bg-[#0b0912]/90 backdrop-blur border-b border-[#261f3d] px-4 py-3">
+    <div class="max-w-xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center font-bold text-white shadow-lg shadow-violet-900/40">
+          K
         </div>
-        <div class="text-right flex-1">
-            <p id="toast-title" class="text-[11px] font-bold text-amber-400">چالاکییا ڕاستەوخۆ</p>
-            <p id="toast-msg" class="text-[10px] text-slate-300">بەکارهێنەرەکی نوێ هژمارا ئایکلاود وەرگرت!</p>
+        <div>
+          <h1 class="font-bold text-base leading-tight">Kurd0o Store</h1>
+          <p class="text-[11px] text-zinc-400">Digital Game Accounts</p>
         </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="openTopupModal()" class="flex items-center gap-1.5 bg-[#161224] hover:bg-[#1e1830] border border-[#261f3d] px-3 py-1.5 rounded-full text-xs font-semibold">
+          <span id="balance-display" class="text-violet-300">$0.00</span>
+          <span class="w-4 h-4 rounded-full bg-violet-600 text-white flex items-center justify-center text-xs">+</span>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <!-- الهيدر الرئيسي -->
-    <div class="w-full max-w-md mx-auto flex flex-col items-center pt-3">
-        
-        <!-- شريط اللغة -->
-        <div class="w-full flex justify-between items-center mb-3">
-            <span class="text-[10px] px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono">CYBER GOLD v2.0</span>
-            <div class="bg-slate-900/90 cyber-border rounded-xl p-1 flex gap-1 text-[11px]">
-                <button onclick="changeLang('ku')" id="btn-ku" class="px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-slate-950 transition">Badînî</button>
-                <button onclick="changeLang('ar')" id="btn-ar" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-amber-400 transition">عربي</button>
-                <button onclick="changeLang('en')" id="btn-en" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-amber-400 transition">English</button>
-            </div>
-        </div>
+  <!-- Main Content -->
+  <main id="app-content" class="max-w-xl mx-auto px-4 pt-4 space-y-3"></main>
 
-        <!-- أيقونة التاج -->
-        <div onclick="adminClick()" class="w-16 h-16 cyber-gold rounded-2xl flex items-center justify-center cyber-glow mb-3 floating cursor-pointer select-none">
-            <i class="fa-solid fa-crown text-2xl text-slate-950"></i>
+  <!-- Cart Drawer / Modal -->
+  <div id="cart-modal" class="fixed inset-0 z-40 hidden bg-black/75 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full max-w-md bg-[#161224] border border-[#261f3d] rounded-t-3xl sm:rounded-2xl p-5 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-[#261f3d]">
+        <h2 class="font-bold text-lg">Shopping Cart</h2>
+        <button onclick="closeCartModal()" class="text-zinc-400 hover:text-white text-xl leading-none">&times;</button>
+      </div>
+
+      <div id="cart-items" class="py-4 space-y-3 overflow-y-auto flex-1"></div>
+
+      <div class="pt-3 border-t border-[#261f3d] space-y-3">
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-zinc-400">Total</span>
+          <span id="cart-total" class="font-bold text-lg text-violet-300">$0.00</span>
         </div>
-        <h1 class="text-2xl font-extrabold tracking-wider gold-text mb-1">Kurd0oAccounts</h1>
-        <p id="t-subtitle" class="text-[11px] text-amber-200/70 mb-3">پلاتفۆرما Cyber Gold بۆ دابەشکرنا هەژماران</p>
-        
-        <a href="https://t.me/Kurd0o1" target="_blank" class="flex items-center gap-2 px-4 py-1.5 bg-slate-900/90 cyber-border rounded-full text-amber-400 text-xs font-semibold hover:bg-slate-800 transition">
-            <span>@Kurd0o1</span>
-            <i class="fa-brands fa-telegram text-amber-400"></i>
-        </a>
+        <button onclick="checkoutCart()" class="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 font-semibold text-sm text-white transition">
+          Complete Order
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- المحتوى الأساسي -->
-    <main class="w-full max-w-md mx-auto my-4 flex flex-col gap-4">
-        
-        <!-- لوحة تحكم الأدمن المخفية -->
-        <div id="admin-panel" class="hidden bg-slate-950 border-2 border-amber-500 rounded-2xl p-4 shadow-2xl">
-            <div class="flex justify-between items-center mb-3">
-                <span class="text-xs font-bold text-amber-400"><i class="fa-solid fa-user-shield"></i> Admin Dashboard</span>
-                <button onclick="document.getElementById('admin-panel').classList.add('hidden')" class="text-xs text-red-400">إغلاق ✖</button>
-            </div>
-            <button onclick="unlockDirectly()" class="w-full py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg">فتح الخزنة مباشرة (معاينة الأدمن)</button>
+  <!-- Topup Modal -->
+  <div id="topup-modal" class="fixed inset-0 z-40 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-[#161224] border border-[#261f3d] rounded-2xl p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="font-bold text-base">Add Demo Balance</h2>
+        <button onclick="closeTopupModal()" class="text-zinc-400 hover:text-white text-xl leading-none">&times;</button>
+      </div>
+      <p class="text-xs text-zinc-400">Choose a quick balance amount for testing orders in the storefront.</p>
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="addBalance(10)" class="py-2.5 rounded-xl bg-[#201a34] hover:bg-violet-600 text-xs font-semibold transition">+$10</button>
+        <button onclick="addBalance(25)" class="py-2.5 rounded-xl bg-[#201a34] hover:bg-violet-600 text-xs font-semibold transition">+$25</button>
+        <button onclick="addBalance(50)" class="py-2.5 rounded-xl bg-[#201a34] hover:bg-violet-600 text-xs font-semibold transition">+$50</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 hidden bg-violet-600 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg"></div>
+
+  <!-- Bottom Navigation -->
+  <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#120e1e]/95 backdrop-blur border-t border-[#261f3d]">
+    <div class="max-w-xl mx-auto grid grid-cols-4 py-2 text-[11px]">
+      <button onclick="setTab('catalog')" id="nav-catalog" class="flex flex-col items-center gap-1 py-1 text-violet-400 font-semibold">
+        <span>Catalog</span>
+      </button>
+      <button onclick="setTab('cart')" id="nav-cart" class="relative flex flex-col items-center gap-1 py-1 text-zinc-400 hover:text-zinc-200">
+        <span>Cart</span>
+        <span id="cart-badge" class="hidden absolute top-0.5 right-6 bg-violet-600 text-white text-[10px] font-bold px-1.5 rounded-full">0</span>
+      </button>
+      <button onclick="setTab('orders')" id="nav-orders" class="flex flex-col items-center gap-1 py-1 text-zinc-400 hover:text-zinc-200">
+        <span>Orders</span>
+      </button>
+      <button onclick="setTab('profile')" id="nav-profile" class="flex flex-col items-center gap-1 py-1 text-zinc-400 hover:text-zinc-200">
+        <span>Profile</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    const games = [
+      {
+        id: 'mc',
+        title: 'Minecraft',
+        rating: '5.0',
+        reviews: 60,
+        sold: 3842,
+        price: 1.00,
+        hot: true,
+        badgeBg: 'from-emerald-500 to-lime-600',
+        icon: '⛏️',
+        desc: 'Full game access with instant delivery.'
+      },
+      {
+        id: 'tr',
+        title: 'Tomb Raider',
+        rating: '4.9',
+        reviews: 24,
+        sold: 518,
+        price: 4.00,
+        hot: true,
+        badgeBg: 'from-amber-500 to-orange-600',
+        icon: '🏹',
+        desc: 'Action-adventure story campaign ready.'
+      },
+      {
+        id: 'rdr',
+        title: 'Red Dead Redemption',
+        rating: '4.9',
+        reviews: 19,
+        sold: 429,
+        price: 5.00,
+        hot: true,
+        badgeBg: 'from-red-600 to-rose-700',
+        icon: '🤠',
+        desc: 'Classic open-world western experience.'
+      },
+      {
+        id: 'gtasa-de',
+        title: 'GTA: San Andreas – Definitive Edition',
+        rating: '4.8',
+        reviews: 31,
+        sold: 890,
+        price: 4.00,
+        hot: false,
+        badgeBg: 'from-purple-600 to-indigo-700',
+        icon: '🌴',
+        desc: 'Remastered edition with updated visuals.'
+      }
+    ];
+
+    let state = {
+      tab: 'catalog',
+      balance: 25.00,
+      cart: [],
+      orders: []
+    };
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.remove('hidden');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.add('hidden'), 2000);
+    }
+
+    function updateHeaderAndBadge() {
+      document.getElementById('balance-display').textContent = `$${state.balance.toFixed(2)}`;
+      const totalQty = state.cart.reduce((sum, item) => sum + item.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      if (totalQty > 0) {
+        badge.textContent = totalQty;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function addToCart(gameId) {
+      const game = games.find(g => g.id === gameId);
+      if (!game) return;
+      const existing = state.cart.find(item => item.id === gameId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({ ...game, qty: 1 });
+      }
+      updateHeaderAndBadge();
+      showToast(`Added ${game.title} to cart`);
+      if (state.tab === 'cart') render();
+    }
+
+    function changeQty(gameId, delta) {
+      const idx = state.cart.findIndex(item => item.id === gameId);
+      if (idx === -1) return;
+      state.cart[idx].qty += delta;
+      if (state.cart[idx].qty <= 0) {
+        state.cart.splice(idx, 1);
+      }
+      updateHeaderAndBadge();
+      renderCartModal();
+      if (state.tab === 'cart') render();
+    }
+
+    function getCartTotal() {
+      return state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    }
+
+    function openCartModal() {
+      renderCartModal();
+      document.getElementById('cart-modal').classList.remove('hidden');
+    }
+
+    function closeCartModal() {
+      document.getElementById('cart-modal').classList.add('hidden');
+    }
+
+    function openTopupModal() {
+      document.getElementById('topup-modal').classList.remove('hidden');
+    }
+
+    function closeTopupModal() {
+      document.getElementById('topup-modal').classList.add('hidden');
+    }
+
+    function addBalance(amount) {
+      state.balance += amount;
+      updateHeaderAndBadge();
+      closeTopupModal();
+      showToast(`Added $${amount.toFixed(2)} to balance`);
+      if (state.tab === 'profile') render();
+    }
+
+    function renderCartModal() {
+      const container = document.getElementById('cart-items');
+      const totalEl = document.getElementById('cart-total');
+      totalEl.textContent = `$${getCartTotal().toFixed(2)}`;
+
+      if (state.cart.length === 0) {
+        container.innerHTML = `<p class="text-center text-zinc-400 text-sm py-8">Your cart is empty.</p>`;
+        return;
+      }
+
+      container.innerHTML = state.cart.map(item => `
+        <div class="flex items-center justify-between bg-[#1c172e] border border-[#2b2347] rounded-xl p-3">
+          <div>
+            <p class="font-semibold text-sm">${item.title}</p>
+            <p class="text-xs text-zinc-400">$${(item.price * item.qty).toFixed(2)}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-[#2a2244] font-bold">-</button>
+            <span class="text-xs font-semibold w-4 text-center">${item.qty}</span>
+            <button onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-violet-600 font-bold">+</button>
+          </div>
         </div>
+      `).join('');
+    }
 
-        <!-- بوابة القنوات الإجبارية -->
-        <div id="channels-section" class="bg-slate-900/90 backdrop-blur cyber-border rounded-2xl p-5 cyber-glow relative overflow-hidden">
-            <div class="absolute top-0 right-0 left-0 h-1 cyber-gold"></div>
-            
-            <h2 id="t-ch-title" class="text-sm font-bold text-white mb-1">چەوا هژمارێ وەردگری؟ (كيف تحصل على الحساب؟)</h2>
-            <p id="t-condition-alert" class="text-[11px] text-amber-400 font-bold bg-amber-500/10 border border-amber-500/30 rounded-lg p-2 mb-3">⚠️ شرط فتح الخزنة: يجب الانضمام للقنوات ومنصات التواصل أدناه أولاً!</p>
-            
-            <p id="t-ch-desc" class="text-[11px] text-slate-400 mb-3">هنگاڤێن ئاسان بۆ ڤەکرنا خەزینا هەژماران:</p>
+    function checkoutCart() {
+      const total = getCartTotal();
+      if (state.cart.length === 0) {
+        showToast('Cart is empty');
+        return;
+      }
+      if (state.balance < total) {
+        showToast('Insufficient balance');
+        return;
+      }
 
-            <!-- خطوات الإرشادات المرتبة -->
-            <div class="grid grid-cols-3 gap-2 mb-4 text-center flex-row-reverse">
-                <div class="bg-slate-950/80 border border-amber-500/30 rounded-xl p-2.5">
-                    <span class="w-5 h-5 cyber-gold rounded-full text-slate-950 text-[10px] font-bold inline-flex items-center justify-center mb-1">1</span>
-                    <p id="t-step1" class="text-[10px] text-slate-300 font-medium">اضغط على الروابط الخمسة</p>
-                </div>
-                <div class="bg-slate-950/80 border border-amber-500/30 rounded-xl p-2.5">
-                    <span class="w-5 h-5 cyber-gold rounded-full text-slate-950 text-[10px] font-bold inline-flex items-center justify-center mb-1">2</span>
-                    <p id="t-step2" class="text-[10px] text-slate-300 font-medium">انتظر 5 ثوانٍ في كل رابط</p>
-                </div>
-                <div class="bg-slate-950/80 border border-amber-500/30 rounded-xl p-2.5">
-                    <span class="w-5 h-5 cyber-gold rounded-full text-slate-950 text-[10px] font-bold inline-flex items-center justify-center mb-1">3</span>
-                    <p id="t-step3" class="text-[10px] text-slate-300 font-medium">ستفتح الخزنة ويظهر الحساب</p>
-                </div>
-            </div>
+      state.balance -= total;
+      state.orders.unshift({
+        id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+        items: state.cart.map(i => `${i.title} (x${i.qty})`).join(', '),
+        total: total,
+        status: 'Completed'
+      });
+      state.cart = [];
+      updateHeaderAndBadge();
+      closeCartModal();
+      showToast('Order completed!');
+      setTab('orders');
+    }
 
-            <!-- شريط التقدم -->
-            <div class="w-full bg-slate-950 rounded-full h-2 mb-2 p-0.5 border border-slate-800">
-                <div id="progress-bar" class="cyber-gold h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-            </div>
-            <div class="flex justify-between text-[10px] text-slate-400 mb-4 px-1">
-                <span id="t-prog-label">رێژا تەواوکرنێ:</span>
-                <span id="progress-text" class="text-amber-400 font-bold">0% (0/5)</span>
-            </div>
+    function setTab(tabName) {
+      state.tab = tabName;
+      ['catalog', 'cart', 'orders', 'profile'].forEach(t => {
+        const el = document.getElementById(`nav-${t}`);
+        if (t === tabName) {
+          el.classList.remove('text-zinc-400');
+          el.classList.add('text-violet-400', 'font-semibold');
+        } else {
+          el.classList.add('text-zinc-400');
+          el.classList.remove('text-violet-400', 'font-semibold');
+        }
+      });
 
-            <!-- القنوات الـ 5 (تليجرام + ديسكورد) -->
-            <div class="flex flex-col gap-2.5 mb-5">
-                <a href="https://t.me/Kurd0o1" target="_blank" onclick="startTimer(1)" id="ch-1" class="flex items-center justify-between px-4 py-3 bg-slate-950/90 border border-slate-800 rounded-xl hover:border-amber-500/60 transition">
-                    <div id="status-1" class="flex items-center gap-2 text-amber-400"><i class="fa-brands fa-telegram text-base"></i></div>
-                    <span class="text-xs font-medium text-slate-200">Kurd0o1 (Telegram)</span>
-                </a>
-                <a href="https://t.me/Kurd0o2" target="_blank" onclick="startTimer(2)" id="ch-2" class="flex items-center justify-between px-4 py-3 bg-slate-950/90 border border-slate-800 rounded-xl hover:border-amber-500/60 transition">
-                    <div id="status-2" class="flex items-center gap-2 text-amber-400"><i class="fa-brands fa-telegram text-base"></i></div>
-                    <span class="text-xs font-medium text-slate-200">Kurd0o2 (Telegram)</span>
-                </a>
-                <a href="https://t.me/Kurd0o3" target="_blank" onclick="startTimer(3)" id="ch-3" class="flex items-center justify-between px-4 py-3 bg-slate-950/90 border border-slate-800 rounded-xl hover:border-amber-500/60 transition">
-                    <div id="status-3" class="flex items-center gap-2 text-amber-400"><i class="fa-brands fa-telegram text-base"></i></div>
-                    <span class="text-xs font-medium text-slate-200">Kurd0o3 (Telegram)</span>
-                </a>
-                <a href="https://t.me/Kurd0o4" target="_blank" onclick="startTimer(4)" id="ch-4" class="flex items-center justify-between px-4 py-3 bg-slate-950/90 border border-slate-800 rounded-xl hover:border-amber-500/60 transition">
-                    <div id="status-4" class="flex items-center gap-2 text-amber-400"><i class="fa-brands fa-telegram text-base"></i></div>
-                    <span class="text-xs font-medium text-slate-200">Kurd0o4 (Telegram)</span>
-                </a>
-                <a href="https://discord.gg/Tn4U989mmz" target="_blank" onclick="startTimer(5)" id="ch-5" class="flex items-center justify-between px-4 py-3 bg-slate-950/90 border border-slate-800 rounded-xl hover:border-amber-500/60 transition">
-                    <div id="status-5" class="flex items-center gap-2 text-indigo-400"><i class="fa-brands fa-discord text-base"></i></div>
-                    <span class="text-xs font-medium text-slate-200">Kurd0o Discord Server</span>
-                </a>
-            </div>
+      if (tabName === 'cart') {
+        openCartModal();
+      }
+      render();
+    }
 
-            <!-- زر فتح الخزنة -->
-            <div id="unlock-btn-container" class="hidden">
-                <button onclick="showAccounts()" class="w-full py-3 cyber-gold text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 animate-bounce">
-                    <i class="fa-solid fa-vault"></i>
-                    <span id="t-unlock-btn">خەزینا هژماران ڤەبوو! دیتنا هژمارێ</span>
-                </button>
+    function renderCatalog() {
+      return games.map(game => `
+        <div class="flex items-center justify-between gap-3 bg-[#161224] hover:bg-[#1a152b] border border-[#261f3d] rounded-2xl p-3.5 transition">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="relative shrink-0">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${game.badgeBg} flex items-center justify-center text-2xl shadow-md">
+                ${game.icon}
+              </div>
+              ${game.hot ? `<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-orange-500 text-[11px] flex items-center justify-center shadow">🔥</span>` : ''}
             </div>
-            <p id="hint-text" class="text-[11px] text-amber-400/80">تکایە ل هەمی کەناڵ و پلاتفۆرمان ببنە ئەندام دا خەزینە ڤەکریت</p>
+            <div class="min-w-0">
+              <h2 class="font-bold text-sm sm:text-base truncate">${game.title}</h2>
+              <div class="flex items-center gap-2 text-xs text-zinc-400 mt-0.5">
+                <span class="text-amber-400 font-semibold">★ ${game.rating}</span>
+                <span>(${game.reviews})</span>
+                <span>•</span>
+                <span>${game.sold} sold</span>
+              </div>
+              <p class="text-[11px] text-zinc-500 truncate mt-0.5">${game.desc}</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 shrink-0">
+            <span class="font-bold text-sm sm:text-base text-white">$${game.price.toFixed(2)}</span>
+            <button onclick="addToCart('${game.id}')" aria-label="Add ${game.title} to cart" class="w-10 h-10 rounded-xl bg-violet-600 hover:bg-violet-700 active:scale-95 flex items-center justify-center text-white transition shadow-md shadow-violet-950/60">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </button>
+          </div>
         </div>
+      `).join('');
+    }
 
-        <!-- خزنة الحسابات -->
-        <div id="accounts-section" class="hidden flex flex-col gap-4">
-            <div class="bg-slate-900/95 backdrop-blur cyber-border rounded-2xl p-5 cyber-glow relative overflow-hidden">
-                <div class="absolute top-0 right-0 left-0 h-1 cyber-gold"></div>
-                <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-vault"></i> <span id="t-vault-title">خەزینا هژماران (Account Vault)</span></span>
-                    <span class="text-[10px] px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded border border-amber-500/30">VIP</span>
-                </div>
-
-                <div class="mb-3">
-                    <label class="block text-xs text-amber-400 mb-1 font-bold">Email / ICloud</label>
-                    <div class="flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl p-2.5">
-                        <span dir="ltr" id="email-1" class="text-slate-200 font-mono text-xs select-all tracking-wider">⏳⏳tomorrow⏳⏳</span>
-                        <button onclick="copyText('email-1', this)" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-amber-400 px-3 py-1 rounded-lg transition flex items-center gap-1"><span class="copy-txt">کۆپی</span> <i class="fa-regular fa-copy"></i></button>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs text-amber-400 mb-1 font-bold">Password</label>
-                    <div class="flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl p-2.5">
-                        <span dir="ltr" id="pass-1" class="text-slate-200 font-mono text-xs select-all tracking-wider">⏳⏳غدا/سباهي⏳⏳</span>
-                        <button onclick="copyText('pass-1', this)" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-amber-400 px-3 py-1 rounded-lg transition flex items-center gap-1"><span class="copy-txt">کۆپی</span> <i class="fa-regular fa-copy"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- قسم التواصل والشراء -->
-            <div class="bg-slate-900/95 backdrop-blur cyber-border rounded-2xl p-5 text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 left-0 h-1 cyber-gold"></div>
-                <p id="t-buy-title" class="text-xs text-slate-300 font-medium mb-1">بۆ بکڕینا یاری و پڕۆگرامان و ئەندامەتییا VIP، پەیوەندیێ ب من بکە:</p>
-                <p class="text-[11px] text-slate-400 mb-3" dir="ltr">For buying games, apps & VIP access, contact me:</p>
-                <a href="https://t.me/yousifmziri" target="_blank" class="inline-flex items-center justify-center gap-2 w-full py-2.5 cyber-gold text-slate-950 text-xs font-bold rounded-xl shadow-lg transition transform hover:scale-[1.02]">
-                    <i class="fa-brands fa-telegram text-base"></i>
-                    <span>@yousifmziri</span>
-                </a>
-            </div>
+    function renderOrders() {
+      if (state.orders.length === 0) {
+        return `
+          <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-8 text-center space-y-2">
+            <p class="font-semibold text-sm">No orders yet</p>
+            <p class="text-xs text-zinc-400">Add a game from the catalog and complete your first order.</p>
+          </div>
+        `;
+      }
+      return state.orders.map(order => `
+        <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-4 space-y-1.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-violet-300">${order.id}</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-semibold">${order.status}</span>
+          </div>
+          <p class="text-sm font-medium">${order.items}</p>
+          <p class="text-xs text-zinc-400">Paid: $${order.total.toFixed(2)}</p>
         </div>
+      `).join('');
+    }
 
-    </main>
+    function renderProfile() {
+      return `
+        <div class="bg-[#161224] border border-[#261f3d] rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="font-bold text-base">Store Member</h2>
+              <p class="text-xs text-zinc-400">Kurd0o Cyber Gold Catalog</p>
+            </div>
+            <button onclick="openTopupModal()" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-xs font-semibold">
+              + Top Up
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-3 pt-2 border-t border-[#261f3d] text-xs">
+            <div class="bg-[#110d1c] rounded-xl p-3">
+              <p class="text-zinc-400">Current Balance</p>
+              <p class="font-bold text-base text-violet-300 mt-1">$${state.balance.toFixed(2)}</p>
+            </div>
+            <div class="bg-[#110d1c] rounded-xl p-3">
+              <p class="text-zinc-400">Total Orders</p>
+              <p class="font-bold text-base text-white mt-1">${state.orders.length}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
-    <!-- الفوتر -->
-    <footer class="w-full text-center text-[11px] text-slate-500 pb-3">
-         هەمی ماف پاراستینە &copy; 2026 Kurd0oAccounts
-    </footer>
+    function render() {
+      const app = document.getElementById('app-content');
+      if (state.tab === 'catalog' || state.tab === 'cart') {
+        app.innerHTML = renderCatalog();
+      } else if (state.tab === 'orders') {
+        app.innerHTML = renderOrders();
+      } else if (state.tab === 'profile') {
+        app.innerHTML = renderProfile();
+      }
+    }
 
-    <script>
-        const translations = {
-            ku: {
-                dir: "rtl", lang: "ku",
-                subtitle: "پلاتفۆرما Cyber Gold بۆ دابەشکرنا هەژماران",
-                chTitle: "چەوا هژمارێ وەردگری؟",
-                conditionAlert: "⚠️ مەرجێ ڤەکرنا خەزینێ: دڤێت ل 5 کەناڵ و پلاتفۆرمان ببە ئەندام پێشوەخت!",
-                chDesc: "هنگاڤێن ئاسان بۆ ڤەکرنا خەزینا هەژماران:",
-                step1: "ل هەر 5 لينکان بنە کلیک",
-                step2: "5 چرکا ل هەر ئێكێ بنە",
-                step3: "خەزینە ڤەکریت و هژمارێ بابهە",
-                progLabel: "رێژا تەواوکرنێ:",
-                unlockBtn: "خەزینا هژماران ڤەبوو! دیتنا هژمارێ",
-                hintText: "تکایە ل هەمی کەناڵ و پلاتفۆرمان ببنە ئەندام دا خەزینە ڤەکریت",
-                vaultTitle: "خەزینا هژماران (Account Vault)",
-                buyTitle: "بۆ بکڕینا یاری و پڕۆگرامان و ئەندامەتییا VIP، پەیوەندیێ ب من بکە:",
-                copyBtn: "کۆپی", copiedText: "کۆپی بوو"
-            },
-            ar: {
-                dir: "rtl", lang: "ar",
-                subtitle: "منصة Cyber Gold لتوزيع الحسابات الاحترافية",
-                chTitle: "كيف تحصل على الحساب؟",
-                conditionAlert: "⚠️ شرط فتح الخزنة: يجب الانضمام للقنوات ومنصات التواصل الخمسة أدناه أولاً!",
-                chDesc: "خطوات بسيطة لفتح خزنة الحسابات:",
-                step1: "اضغط على الروابط الخمسة",
-                step2: "انتظر 5 ثوانٍ في كل رابط",
-                step3: "ستفتح الخزنة ويظهر الحساب",
-                progLabel: "نسبة الإنجاز:",
-                unlockBtn: "تم فتح الخزنة! عرض الحساب الآن",
-                hintText: "يرجى الانضمام إلى جميع القنوات والمنصات لفتح الخزنة",
-                vaultTitle: "خزنة الحسابات (Account Vault)",
-                buyTitle: "لشراء الألعاب والتطبيقات وعضوية VIP، تواصل معي هنا:",
-                copyBtn: "نسخ", copiedText: "تم النسخ"
-            },
-            en: {
-                dir: "ltr", lang: "en",
-                subtitle: "Cyber Gold Platform for Premium Accounts",
-                chTitle: "How to get the account?",
-                conditionAlert: "⚠️ Vault Unlock Condition: You must join the 5 channels & platforms below first!",
-                chDesc: "Simple steps to unlock the account vault:",
-                step1: "Click all 5 links",
-                step2: "Wait 5s in each link",
-                step3: "Vault unlocks to show account",
-                progLabel: "Progress:",
-                unlockBtn: "Vault Unlocked! View Account Now",
-                hintText: "Please join all channels & platforms to unlock the Vault",
-                vaultTitle: "Account Vault",
-                buyTitle: "For buying games, apps & VIP access, contact me:",
-                copyBtn: "Copy", copiedText: "Copied"
-            }
-        };
-
-        let currentLang = 'ku';
-
-        function changeLang(lang) {
-            currentLang = lang;
-            const t = translations[lang];
-            document.getElementById('html-root').setAttribute('dir', t.dir);
-            document.getElementById('html-root').setAttribute('lang', t.lang);
-
-            ['ku', 'ar', 'en'].forEach(l => {
-                const btn = document.getElementById('btn-' + l);
-                btn.className = (l === lang) 
-                    ? "px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-slate-950 transition"
-                    : "px-2.5 py-1 rounded-lg text-slate-300 hover:text-amber-400 transition";
-            });
-
-            document.getElementById('t-subtitle').innerText = t.subtitle;
-            document.getElementById('t-ch-title').innerText = t.chTitle;
-            document.getElementById('t-condition-alert').innerText = t.conditionAlert;
-            document.getElementById('t-ch-desc').innerText = t.chDesc;
-            document.getElementById('t-step1').innerText = t.step1;
-            document.getElementById('t-step2').innerText = t.step2;
-            document.getElementById('t-step3').innerText = t.step3;
-            document.getElementById('t-prog-label').innerText = t.progLabel;
-            document.getElementById('t-unlock-btn').innerText = t.unlockBtn;
-            document.getElementById('hint-text').innerText = t.hintText;
-            document.getElementById('t-vault-title').innerText = t.vaultTitle;
-            document.getElementById('t-buy-title').innerText = t.buyTitle;
-        }
-
-        let channelState = { 1: 'pending', 2: 'pending', 3: 'pending', 4: 'pending', 5: 'pending' };
-
-        function updateProgress() {
-            let doneCount = Object.values(channelState).filter(val => val === 'done').length;
-            let percent = (doneCount / 5) * 100;
-            document.getElementById('progress-bar').style.width = percent + '%';
-            document.getElementById('progress-text').innerText = percent + '% (' + doneCount + '/5)';
-            
-            if (doneCount === 5) {
-                document.getElementById('unlock-btn-container').classList.remove('hidden');
-                document.getElementById('hint-text').style.display = 'none';
-            }
-        }
-
-        function startTimer(channelNum) {
-            if (channelState[channelNum] !== 'pending') return;
-            channelState[channelNum] = 'counting';
-            const btn = document.getElementById('ch-' + channelNum);
-            const statusDiv = document.getElementById('status-' + channelNum);
-            btn.classList.add('border-amber-500/60', 'bg-amber-950/20');
-            
-            let seconds = 5;
-            statusDiv.innerHTML = `<span class="text-[11px] text-amber-400 font-medium">(${seconds}s)</span> <i class="fa-solid fa-spinner fa-spin text-amber-400 text-xs"></i>`;
-
-            const interval = setInterval(() => {
-                seconds--;
-                if (seconds > 0) {
-                    statusDiv.innerHTML = `<span class="text-[11px] text-amber-400 font-medium">(${seconds}s)</span> <i class="fa-solid fa-spinner fa-spin text-amber-400 text-xs"></i>`;
-                } else {
-                    clearInterval(interval);
-                    channelState[channelNum] = 'done';
-                    btn.classList.remove('border-amber-500/60', 'bg-amber-950/20');
-                    btn.classList.add('border-emerald-500/60', 'bg-emerald-950/20');
-                    statusDiv.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>`;
-                    updateProgress();
-                }
-            }, 1000);
-        }
-
-        function showAccounts() {
-            localStorage.setItem('vault_unlocked_time', Date.now());
-            document.getElementById('channels-section').style.display = 'none';
-            document.getElementById('accounts-section').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const unlockedTime = localStorage.getItem('vault_unlocked_time');
-            const tenMinutes = 10 * 60 * 1000;
-
-            if (unlockedTime) {
-                const currentTime = Date.now();
-                const timePassed = currentTime - parseInt(unlockedTime);
-
-                if (timePassed < tenMinutes) {
-                    document.getElementById('channels-section').style.display = 'none';
-                    document.getElementById('accounts-section').classList.remove('hidden');
-                } else {
-                    localStorage.removeItem('vault_unlocked_time');
-                }
-            }
-        });
-
-        function copyText(elementId, btn) {
-            const text = document.getElementById(elementId).innerText;
-            const t = translations[currentLang];
-            const spanTxt = btn.querySelector('.copy-txt');
-            navigator.clipboard.writeText(text).then(() => {
-                spanTxt.innerText = t.copiedText;
-                setTimeout(() => { spanTxt.innerText = t.copyBtn; }, 1500);
-            });
-        }
-
-        const liveMessages = [
-            "أحد الزوار فتح خزنة الحسابات الآن!",
-            "مستخدم جديد حصل على تفاصيل حساب آيفون بنجاح",
-            "تم تحديث بيانات الحسابات قبل قليل",
-            "انضم الآن إلى القنوات وسيرفر الديسكورد لتحصل على أحدث الحسابات"
-        ];
-        setInterval(() => {
-            const toast = document.getElementById('live-toast');
-            const msgEl = document.getElementById('toast-msg');
-            msgEl.innerText = liveMessages[Math.floor(Math.random() * liveMessages.length)];
-            
-            toast.classList.remove('translate-y-24', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-24', 'opacity-0');
-            }, 4000);
-        }, 12000);
-
-        let crownClicks = 0;
-        function adminClick() {
-            crownClicks++;
-            if (crownClicks >= 5) {
-                document.getElementById('admin-panel').classList.add('hidden');
-                crownClicks = 0;
-            }
-        }
-        function unlockDirectly() {
-            showAccounts();
-            document.getElementById('admin-panel').classList.add('hidden');
-        }
-    </script>
+    updateHeaderAndBadge();
+    render();
+  </script>
 </body>
 </html>
