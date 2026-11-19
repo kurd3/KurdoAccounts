@@ -1,406 +1,187 @@
-
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="dark">
+<html lang="en" class="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kurd0o | Apple Account Rental</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-body {
-  background:#09090d;
-  color:#f4f4f5;
-  font-family:system-ui,sans-serif;
-}
-.card {
-  background:#15141d;
-  border:1px solid #292536;
-  border-radius:18px;
-}
-.accent { color:#a78bfa; }
-.btn {
-  background:#7c3aed;
-  color:white;
-  border-radius:12px;
-  padding:11px 16px;
-  font-weight:700;
-}
-.btn:hover { background:#6d28d9; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kurd0o | Charcoal & Orange Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            charcoal: '#09090b',
+            surface: '#121216',
+            card: '#16161b',
+            line: '#27272f',
+            ember: '#f97316',
+            emberhover: '#ea580c'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #09090b;
+      background-image: radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.14), transparent 48%);
+      color: #fafafa;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .game-card {
+      background: linear-gradient(180deg, #17171c 0%, #111115 100%);
+      border: 1px solid #27272f;
+      transition: transform 0.18s ease, border-color 0.2s ease, box-shadow 0.22s ease;
+    }
+    .game-card:hover {
+      border-color: rgba(249, 115, 22, 0.55);
+      box-shadow: 0 16px 36px -14px rgba(249, 115, 22, 0.25);
+    }
+    .game-card:active {
+      transform: scale(0.985);
+    }
+    .req-btn {
+      transition: transform 0.14s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .req-btn:active {
+      transform: scale(0.96);
+    }
+  </style>
 </head>
+<body class="min-h-screen pb-12 selection:bg-orange-500 selection:text-black">
 
-<body class="min-h-screen pb-24">
+  <!-- Top Bar -->
+  <header class="sticky top-0 z-20 bg-[#09090b]/90 backdrop-blur-md border-b border-[#27272f] px-4 py-3.5">
+    <div class="max-w-4xl mx-auto flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-orange-500 text-black font-black flex items-center justify-center text-base shadow-md shadow-orange-500/25">
+          K
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base sm:text-lg tracking-tight leading-none">KURD0O STORE</h1>
+          <p class="text-[11px] text-orange-400/90 font-medium mt-1">INSTANT TELEGRAM REQUEST</p>
+        </div>
+      </div>
 
-<header class="sticky top-0 z-30 bg-[#09090d]/95 backdrop-blur border-b border-[#292536] p-4">
- <div class="max-w-xl mx-auto flex justify-between items-center">
-  <div class="flex items-center gap-3">
-   <div class="w-10 h-10 rounded-xl bg-violet-700 flex items-center justify-center font-bold text-xl">K</div>
-   <div>
-    <h1 class="font-bold">Kurd0o Store</h1>
-    <p class="text-xs text-zinc-400" id="subtitle">Apple Account Rental</p>
-   </div>
-  </div>
-  <div class="flex gap-1 text-xs">
-   <button onclick="setLang('ar')" class="px-2 py-1">AR</button>
-   <button onclick="setLang('en')" class="px-2 py-1">EN</button>
-   <button onclick="setLang('ku')" class="px-2 py-1">KU</button>
-  </div>
- </div>
-</header>
-
-<main class="max-w-xl mx-auto p-4 space-y-4">
-
- <section class="rounded-2xl p-5 border border-violet-900 bg-gradient-to-br from-[#201536] to-[#111019]">
-  <span class="text-xs text-violet-300" id="welcome-small">WELCOME TO KURD0O</span>
-  <h2 class="text-2xl font-bold mt-2" id="welcome-title">Apple Account Rental</h2>
-  <p class="text-sm text-zinc-400 mt-2" id="welcome-desc">
-   Rent an account to download your favorite games.
-  </p>
-  <div class="mt-4 flex gap-2 text-xs">
-   <span class="bg-violet-900/50 px-3 py-2 rounded-lg" id="manual">Manual Delivery</span>
-   <span class="bg-violet-900/50 px-3 py-2 rounded-lg" id="secure">Manual Payment</span>
-  </div>
- </section>
-
- <div class="flex justify-between items-center">
-  <h2 class="font-bold text-lg" id="catalog-title">Available Accounts</h2>
-  <span class="text-xs text-zinc-500" id="catalog-sub">Rental service</span>
- </div>
-
- <div id="products" class="space-y-3"></div>
-
- <section class="card p-4 space-y-3">
-  <h3 class="font-bold" id="rules-title">Rental Rules</h3>
-  <div class="text-xs text-zinc-400 space-y-2" id="rules">
-   <p>• Accounts are rented for downloading games only.</p>
-   <p>• Do not change account information or security settings.</p>
-   <p>• Sign out after downloading the game.</p>
-   <p>• Delivery and payment are handled manually.</p>
-  </div>
- </section>
-
- <section id="cart-section" class="card p-4 space-y-3">
-  <div class="flex justify-between">
-   <h2 class="font-bold text-lg" id="cart-title">Your Cart</h2>
-   <span id="cart-count" class="text-violet-300 text-sm">0 items</span>
-  </div>
-
-  <div id="cart-items" class="space-y-2">
-   <p class="text-sm text-zinc-500" id="empty-cart">Your cart is empty.</p>
-  </div>
-
-  <div class="border-t border-[#292536] pt-3 flex justify-between">
-   <span id="total-label">Total</span>
-   <strong class="text-violet-300" id="total">$0.00</strong>
-  </div>
-
-  <button onclick="checkout()" class="btn w-full" id="checkout-btn">
-   Confirm Rental Order
-  </button>
- </section>
-
- <section class="card p-4 space-y-3">
-  <h2 class="font-bold" id="contact-title">Contact Us</h2>
-  <p class="text-sm text-zinc-400" id="contact-desc">
-   Contact us on Telegram for rental and delivery.
-  </p>
-  <a href="https://t.me/yousifmziri" target="_blank"
-     class="btn block text-center" id="telegram-btn">
-     Contact on Telegram
-  </a>
- </section>
-
-</main>
-
-<nav class="fixed bottom-0 inset-x-0 bg-[#111019]/95 border-t border-[#292536]">
- <div class="max-w-xl mx-auto grid grid-cols-3 text-center text-xs">
-  <button onclick="scrollToTop()" class="p-4 text-violet-300" id="nav-home">Home</button>
-  <button onclick="scrollToCart()" class="p-4 text-zinc-400" id="nav-cart">Cart</button>
-  <button onclick="scrollToContact()" class="p-4 text-zinc-400" id="nav-contact">Contact</button>
- </div>
-</nav>
-
-<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-violet-700 px-4 py-3 rounded-xl text-sm hidden z-50"></div>
-
-<script>
-const TELEGRAM_USER = "yousifmziri";
-
-const products = [
- {
-  id:1,
-  name:"Minecraft",
-  price:1,
-  duration:"24 Hours",
-  image:"https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png",
-  available:true
- },
- {
-  id:2,
-  name:"GTA San Andreas",
-  price:2,
-  duration:"24 Hours",
-  image:"https://upload.wikimedia.org/wikipedia/en/c/c4/GTASABOX.jpg",
-  available:true
- },
- {
-  id:3,
-  name:"Tomb Raider",
-  price:2,
-  duration:"24 Hours",
-  image:"https://upload.wikimedia.org/wikipedia/en/0/0a/Tomb_Raider_%282013_video_game%29.jpg",
-  available:true
- },
- {
-  id:4,
-  name:"Red Dead Redemption",
-  price:3,
-  duration:"24 Hours",
-  image:"https://upload.wikimedia.org/wikipedia/en/a/a7/Red_Dead_Redemption.jpg",
-  available:false
- }
-];
-
-const translations = {
- en:{
-  subtitle:"Apple Account Rental",
-  welcome:"Apple Account Rental",
-  desc:"Rent an account to download your favorite games.",
-  manual:"Manual Delivery",
-  secure:"Manual Payment",
-  catalog:"Available Accounts",
-  sub:"Rental service",
-  rules:"Rental Rules",
-  rule1:"• Accounts are rented for downloading games only.",
-  rule2:"• Do not change account information or security settings.",
-  rule3:"• Sign out after downloading the game.",
-  rule4:"• Delivery and payment are handled manually.",
-  cart:"Your Cart",
-  empty:"Your cart is empty.",
-  total:"Total",
-  checkout:"Confirm Rental Order",
-  contact:"Contact Us",
-  contactDesc:"Contact us on Telegram for rental and delivery.",
-  telegram:"Contact on Telegram",
-  home:"Home",cartNav:"Cart",contactNav:"Contact",
-  add:"Rent Now",
-  unavailable:"Unavailable",
-  added:"Added to cart!",
-  duration:"Duration",
-  available:"Available",
-  unavailableText:"Unavailable",
-  items:"items",
-  order:"Hello! I want to rent these Apple accounts:",
-  durationLabel:"Rental duration"
- },
- ar:{
-  subtitle:"تأجير حسابات أبل",
-  welcome:"تأجير حسابات Apple",
-  desc:"استأجر حساباً لتنزيل ألعابك المفضلة.",
-  manual:"تسليم يدوي",
-  secure:"دفع يدوي",
-  catalog:"الحسابات المتاحة",
-  sub:"خدمة التأجير",
-  rules:"شروط التأجير",
-  rule1:"• الحسابات مخصصة لتنزيل الألعاب فقط.",
-  rule2:"• يمنع تغيير معلومات الحساب أو إعدادات الأمان.",
-  rule3:"• سجّل الخروج من الحساب بعد تنزيل اللعبة.",
-  rule4:"• التسليم والدفع يتمان يدوياً.",
-  cart:"سلة التأجير",
-  empty:"السلة فارغة حالياً.",
-  total:"المجموع",
-  checkout:"تأكيد طلب التأجير",
-  contact:"تواصل معنا",
-  contactDesc:"تواصل معنا عبر تليجرام للتأجير والتسليم.",
-  telegram:"التواصل عبر تليجرام",
-  home:"الرئيسية",cartNav:"السلة",contactNav:"التواصل",
-  add:"استئجار الآن",
-  unavailable:"غير متاح",
-  added:"تمت الإضافة إلى السلة!",
-  duration:"المدة",
-  available:"متاح",
-  unavailableText:"غير متاح",
-  items:"عناصر",
-  order:"مرحباً، أريد استئجار حسابات Apple التالية:",
-  durationLabel:"مدة التأجير"
- },
- ku:{
-  subtitle:"کرێدانا ئەکاونتێن Apple",
-  welcome:"کرێدانا ئەکاونتێن Apple",
-  desc:"ئەکاونتێک بکرێ بۆ داگرتنا یاریێن تە.",
-  manual:"گەهاندنا دەستی",
-  secure:"پارەدانێ دەستی",
-  catalog:"ئەکاونتێن بەردەست",
-  sub:"خزمەتا کرێدانێ",
-  rules:"مەرجێن کرێدانێ",
-  rule1:"• ئەکاونت بۆ داگرتنا یاریانە تەنێ.",
-  rule2:"• زانیاری و پاراستنا ئەکاونتی مەگۆڕە.",
-  rule3:"• پشتی داگرتنا یاریێ، دەرکەڤە.",
-  rule4:"• گەهاندن و پارەدان دەستکاری دکرێن.",
-  cart:"سەبەتە",
-  empty:"سەبەتە یا بەتالە.",
-  total:"کۆم",
-  checkout:"پشتراستکرنا داواکاریێ",
-  contact:"پەیوەندی",
-  contactDesc:"بۆ کرێدانێ پەیوەندیێ ب مە بکە ل تێلیگرامێ.",
-  telegram:"پەیوەندی ل تێلیگرامێ",
-  home:"سەرەکی",cartNav:"سەبەتە",contactNav:"پەیوەندی",
-  add:"بکرێ",
-  unavailable:"نەبەردەستە",
-  added:"زێدەکرایە سەبەتە!",
-  duration:"ماوە",
-  available:"بەردەستە",
-  unavailableText:"نەبەردەستە",
-  items:"دانە",
-  order:"سڵاڤ، دڤێت ئەڤ ئەکاونتێن Apple بکرێم:",
-  durationLabel:"ماوێ کرێدانێ"
- }
-};
-
-let lang="en";
-let cart=[];
-
-function tr(){return translations[lang];}
-
-function setLang(l){
- lang=l;
- const t=tr();
- document.documentElement.lang=l;
- document.documentElement.dir=l==="en"?"ltr":"rtl";
-
- document.getElementById("subtitle").textContent=t.subtitle;
- document.getElementById("welcome-title").textContent=t.welcome;
- document.getElementById("welcome-desc").textContent=t.desc;
- document.getElementById("manual").textContent=t.manual;
- document.getElementById("secure").textContent=t.secure;
- document.getElementById("catalog-title").textContent=t.catalog;
- document.getElementById("catalog-sub").textContent=t.sub;
- document.getElementById("rules-title").textContent=t.rules;
- document.getElementById("rules").innerHTML=
- `<p>${t.rule1}</p><p>${t.rule2}</p><p>${t.rule3}</p><p>${t.rule4}</p>`;
- document.getElementById("cart-title").textContent=t.cart;
- document.getElementById("empty-cart").textContent=t.empty;
- document.getElementById("total-label").textContent=t.total;
- document.getElementById("checkout-btn").textContent=t.checkout;
- document.getElementById("contact-title").textContent=t.contact;
- document.getElementById("contact-desc").textContent=t.contactDesc;
- document.getElementById("telegram-btn").textContent=t.telegram;
- document.getElementById("nav-home").textContent=t.home;
- document.getElementById("nav-cart").textContent=t.cartNav;
- document.getElementById("nav-contact").textContent=t.contactNav;
-
- renderProducts();
- renderCart();
-}
-
-function renderProducts(){
- const t=tr();
- document.getElementById("products").innerHTML=products.map(p=>`
-  <div class="card p-3 flex gap-3 items-center">
-   <img src="${p.image}"
-        class="w-16 h-16 rounded-xl object-cover bg-zinc-800"
-        alt="${p.name}"
-        onerror="this.style.display='none'">
-   <div class="flex-1 min-w-0">
-    <h3 class="font-bold text-sm">${p.name}</h3>
-    <p class="text-xs text-zinc-400 mt-1">${t.duration}: ${p.duration}</p>
-    <p class="text-xs ${p.available?'text-emerald-400':'text-red-400'} mt-1">
-     ${p.available?t.available:t.unavailableText}
-    </p>
-    <p class="text-violet-300 font-bold mt-2">$${p.price.toFixed(2)}</p>
-   </div>
-   <button
-    onclick="addToCart(${p.id})"
-    ${!p.available?'disabled':''}
-    class="btn text-xs ${!p.available?'opacity-40':''}">
-    ${p.available?t.add:t.unavailable}
-   </button>
-  </div>
- `).join("");
-}
-
-function addToCart(id){
- const p=products.find(x=>x.id===id);
- if(!p || !p.available)return;
- if(cart.some(x=>x.id===id)){
-  showToast(tr().added);
-  return;
- }
- cart.push({...p});
- renderCart();
- showToast(tr().added);
-}
-
-function removeItem(id){
- cart=cart.filter(x=>x.id!==id);
- renderCart();
-}
-
-function renderCart(){
- const t=tr();
- const container=document.getElementById("cart-items");
-
- document.getElementById("cart-count").textContent=
- cart.length+" "+t.items;
-
- if(cart.length===0){
-  container.innerHTML=`<p class="text-sm text-zinc-500">${t.empty}</p>`;
- }else{
-  container.innerHTML=cart.map(p=>`
-   <div class="flex items-center justify-between bg-[#211d2b] p-3 rounded-xl gap-2">
-    <div>
-     <p class="text-sm font-semibold">${p.name}</p>
-     <p class="text-xs text-zinc-400">${p.duration}</p>
-     <p class="text-violet-300 text-sm">$${p.price.toFixed(2)}</p>
+      <a
+        href="https://t.me/yousifmziri"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="req-btn px-3.5 py-1.5 rounded-lg bg-[#16161b] hover:bg-[#1f1f27] border border-orange-500/40 text-orange-400 text-xs font-bold tracking-wide"
+      >
+        @yousifmziri
+      </a>
     </div>
-    <button onclick="removeItem(${p.id})"
-      class="text-red-400 text-xs">Remove ×</button>
-   </div>
-  `).join("");
- }
+  </header>
 
- const total=cart.reduce((s,p)=>s+p.price,0);
- document.getElementById("total").textContent="$"+total.toFixed(2);
-}
+  <!-- Games Grid -->
+  <main class="max-w-4xl mx-auto px-4 pt-6">
+    <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
+  </main>
 
-function checkout(){
- if(cart.length===0){
-  showToast(tr().empty);
-  return;
- }
+  <script>
+    const TELEGRAM_USER = 'yousifmziri';
 
- let message=tr().order+"\n\n";
+    const games = [
+      {
+        id: 'minecraft',
+        title: 'Minecraft',
+        price: 1.00,
+        images: [
+          'https://images.launchbox-app.com/e6b4f4e4-63d2-4d3d-98f6-5669a3c42b13.jpg',
+          'https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png'
+        ],
+        fallback: 'MINECRAFT'
+      },
+      {
+        id: 'tomb-raider',
+        title: 'Tomb Raider',
+        price: 4.00,
+        images: [
+          'https://images.launchbox-app.com/72894a8b-0a7b-4f9e-8b5a-31f92c2d9a11.jpg',
+          'https://upload.wikimedia.org/wikipedia/en/0/0a/Tomb_Raider_%282013_video_game%29.jpg'
+        ],
+        fallback: 'TOMB RAIDER'
+      },
+      {
+        id: 'rdr',
+        title: 'Red Dead Redemption',
+        price: 5.00,
+        images: [
+          'https://upload.wikimedia.org/wikipedia/en/a/a7/Red_Dead_Redemption.jpg',
+          'https://images.launchbox-app.com/19336877-2d8a-4d27-9a4e-8f7a9d3c6b12.jpg'
+        ],
+        fallback: 'RED DEAD REDEMPTION'
+      },
+      {
+        id: 'gta-sa-de',
+        title: 'GTA: San Andreas – Definitive Edition',
+        price: 4.00,
+        images: [
+          'https://upload.wikimedia.org/wikipedia/en/c/c4/GTASABOX.jpg',
+          'https://images.launchbox-app.com/6a9c8f2e-3b1d-4e7a-9c5b-2d4f6a8e1b3c.jpg'
+        ],
+        fallback: 'GTA SAN ANDREAS DE'
+      }
+    ];
 
- cart.forEach(p=>{
-  message+=`- ${p.name} | $${p.price.toFixed(2)} | ${p.duration}\n`;
- });
+    function handleCoverError(imgEl, gameId, nextIndex) {
+      const game = games.find(g => g.id === gameId);
+      if (game && game.images && nextIndex < game.images.length) {
+        imgEl.setAttribute('onerror', `handleCoverError(this, '${gameId}', ${nextIndex + 1})`);
+        imgEl.src = game.images[nextIndex];
+      } else {
+        const label = game ? game.fallback : 'GAME';
+        imgEl.outerHTML = `<div class="w-full h-full bg-[#1b1b22] flex items-center justify-center text-orange-400 font-extrabold text-sm tracking-wider px-4 text-center">${label}</div>`;
+      }
+    }
 
- const total=cart.reduce((s,p)=>s+p.price,0);
- message+=`\n${tr().total}: $${total.toFixed(2)}`;
- message+="\n\nTelegram: @"+TELEGRAM_USER;
+    function buildRequestUrl(game) {
+      const message = `Hello @${TELEGRAM_USER}, I want to REQUEST: ${game.title} ($${game.price.toFixed(2)})`;
+      return `https://t.me/${TELEGRAM_USER}?text=${encodeURIComponent(message)}`;
+    }
 
- const url=`https://t.me/${TELEGRAM_USER}?text=${encodeURIComponent(message)}`;
- window.open(url,"_blank");
-}
+    function renderGames() {
+      const grid = document.getElementById('games-grid');
+      grid.innerHTML = games.map(game => {
+        const tgLink = buildRequestUrl(game);
+        return `
+          <article class="game-card rounded-2xl overflow-hidden flex flex-col">
+            <div class="relative w-full h-60 sm:h-64 bg-[#101014] overflow-hidden border-b border-[#27272f]">
+              <img
+                src="${game.images[0]}"
+                alt="${game.title}"
+                class="w-full h-full object-cover transition duration-300 hover:scale-105"
+                onerror="handleCoverError(this, '${game.id}', 1)"
+              />
+              <span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-black/80 backdrop-blur border border-orange-500/50 text-orange-400 font-extrabold text-sm">
+                $${game.price.toFixed(2)}
+              </span>
+            </div>
 
-function showToast(msg){
- const el=document.getElementById("toast");
- el.textContent=msg;
- el.classList.remove("hidden");
- setTimeout(()=>el.classList.add("hidden"),2200);
-}
+            <div class="p-4 flex-1 flex flex-col justify-between gap-4">
+              <h2 class="font-bold text-base sm:text-lg text-white leading-snug">
+                ${game.title}
+              </h2>
 
-function scrollToTop(){
- window.scrollTo({top:0,behavior:"smooth"});
-}
-function scrollToCart(){
- document.getElementById("cart-section").scrollIntoView({behavior:"smooth"});
-}
-function scrollToContact(){
- document.getElementById("contact-title").scrollIntoView({behavior:"smooth"});
-}
+              <a
+                href="${tgLink}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="req-btn w-full py-3 px-4 rounded-xl bg-orange-500 hover:bg-orange-600 text-black font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20"
+              >
+                <span>REQUEST</span>
+                <span>$${game.price.toFixed(2)}</span>
+              </a>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
 
-setLang("en");
-</script>
-
+    renderGames();
+  </script>
 </body>
 </html>
